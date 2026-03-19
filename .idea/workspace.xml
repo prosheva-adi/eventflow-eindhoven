@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="Add Spring Boot application setup">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.iml" beforeDir="false" />
-    </list>
+    <list default="true" id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="Landing page" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -112,7 +108,7 @@
       <workItem from="1773922742420" duration="144000" />
       <workItem from="1773922906653" duration="57000" />
       <workItem from="1773923027881" duration="127000" />
-      <workItem from="1773923171010" duration="377000" />
+      <workItem from="1773923171010" duration="909000" />
     </task>
     <task id="LOCAL-00001" summary="Initial backend setup">
       <option name="closed" value="true" />
@@ -138,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773868740476</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Landing page">
+      <option name="closed" value="true" />
+      <created>1773923699867</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1773923699867</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,7 +151,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial backend setup" />
     <MESSAGE value="Add Spring Boot application setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Spring Boot application setup" />
+    <MESSAGE value="Landing page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Landing page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
