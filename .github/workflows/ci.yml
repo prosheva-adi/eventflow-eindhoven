@@ -16,6 +16,9 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
+      - name: Make gradlew executable
+        working-directory: ./backend
+        run: chmod +x gradlew
       - name: Build backend
         working-directory: ./backend
         run: ./gradlew build -x test
@@ -27,7 +30,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - name: Install dependencies
         working-directory: ./frontend
         run: npm install

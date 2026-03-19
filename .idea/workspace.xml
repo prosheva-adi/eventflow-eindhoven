@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="Landing page" />
+    <list default="true" id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="Added CI/CD pipeline">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +110,7 @@
       <workItem from="1773922742420" duration="144000" />
       <workItem from="1773922906653" duration="57000" />
       <workItem from="1773923027881" duration="127000" />
-      <workItem from="1773923171010" duration="909000" />
+      <workItem from="1773923171010" duration="1272000" />
     </task>
     <task id="LOCAL-00001" summary="Initial backend setup">
       <option name="closed" value="true" />
@@ -142,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773923699867</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added CI/CD pipeline">
+      <option name="closed" value="true" />
+      <created>1773924331763</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1773924331763</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +162,8 @@
     <MESSAGE value="Initial backend setup" />
     <MESSAGE value="Add Spring Boot application setup" />
     <MESSAGE value="Landing page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Landing page" />
+    <MESSAGE value="Added CI/CD pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added CI/CD pipeline" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
