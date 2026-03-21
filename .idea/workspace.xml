@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="Remove application.properties from tracking">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/UserFollowedVenue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/UserFollowedVenueId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/UserLikedEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/UserLikedEventId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/Venue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/enums/Category.java" afterDir="false" />
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="Add JPA entities">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/repository/EventRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/repository/UserFollowedVenueRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/repository/UserLikedEventRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/repository/VenueRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,6 +44,7 @@
       <list>
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -116,7 +114,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1774115892201</updated>
-      <workItem from="1774115894244" duration="6244000" />
+      <workItem from="1774115894244" duration="8223000" />
     </task>
     <task id="LOCAL-00001" summary="Add database migration and PostgreSQL connection">
       <option name="closed" value="true" />
@@ -134,7 +132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774117060893</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add JPA entities">
+      <option name="closed" value="true" />
+      <created>1774124815173</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1774124815173</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +149,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add database migration and PostgreSQL connection" />
     <MESSAGE value="Remove application.properties from tracking" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove application.properties from tracking" />
+    <MESSAGE value="Add JPA entities" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add JPA entities" />
   </component>
 </project>
