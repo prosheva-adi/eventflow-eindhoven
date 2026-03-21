@@ -2,6 +2,7 @@ package com.eventflow.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,10 +24,10 @@ public class Venue {
     private String address;
 
     @Column(nullable = false, precision = 9, scale = 6)
-    private Double latitude;
+    private BigDecimal latitude;
 
     @Column(nullable = false, precision = 9, scale = 6)
-    private Double longitude;
+    private BigDecimal longitude;
 
     @Column(name = "image_url")
     private String imageUrl;
