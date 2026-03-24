@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="Adding controllers">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/config/SecurityConfig.java" afterDir="false" />
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="disabling Spring Security for now and creating CORS">
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/EventMap.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/EventsPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/LoginPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/SavedPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +101,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\prosh\eventflow-eindhoven\frontend\src\components" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend.main" />
@@ -118,7 +131,8 @@
       <option name="presentableId" value="Default" />
       <updated>1774115892201</updated>
       <workItem from="1774115894244" duration="9986000" />
-      <workItem from="1774279238378" duration="3840000" />
+      <workItem from="1774279238378" duration="9365000" />
+      <workItem from="1774344901694" duration="3402000" />
     </task>
     <task id="LOCAL-00001" summary="Add database migration and PostgreSQL connection">
       <option name="closed" value="true" />
@@ -176,7 +190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774281483511</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="disabling Spring Security for now and creating CORS">
+      <option name="closed" value="true" />
+      <created>1774285427807</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1774285427807</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +212,7 @@
     <MESSAGE value="Add services and event categories migration" />
     <MESSAGE value="Update CI pipeline to run on all branches" />
     <MESSAGE value="Adding controllers" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding controllers" />
+    <MESSAGE value="disabling Spring Security for now and creating CORS" />
+    <option name="LAST_COMMIT_MESSAGE" value="disabling Spring Security for now and creating CORS" />
   </component>
 </project>
