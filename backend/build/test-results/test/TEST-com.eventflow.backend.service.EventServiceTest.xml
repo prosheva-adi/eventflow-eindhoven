@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.eventflow.backend.service.EventServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-03-25T09:39:27.032Z" hostname="DESKTOP-O923T9V" time="0.179">
+  <properties/>
+  <testcase name="getEventById_WhenNotExists_ReturnsEmpty()" classname="com.eventflow.backend.service.EventServiceTest" time="0.165"/>
+  <testcase name="getAllEvents_ReturnsListOfEvents()" classname="com.eventflow.backend.service.EventServiceTest" time="0.004"/>
+  <testcase name="deleteEvent_CallsRepositoryDelete()" classname="com.eventflow.backend.service.EventServiceTest" time="0.002"/>
+  <testcase name="getEventById_WhenExists_ReturnsEvent()" classname="com.eventflow.backend.service.EventServiceTest" time="0.003"/>
+  <testcase name="saveEvent_ReturnsSavedEvent()" classname="com.eventflow.backend.service.EventServiceTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
