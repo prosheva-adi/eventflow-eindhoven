@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.eventflow.backend.service.VenueServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-03-25T09:39:27.260Z" hostname="DESKTOP-O923T9V" time="0.041">
+<testsuite name="com.eventflow.backend.service.VenueServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-03-25T23:15:02.253Z" hostname="DESKTOP-O923T9V" time="0.044">
   <properties/>
-  <testcase name="getAllVenues_ReturnsListOfVenues()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.034"/>
+  <testcase name="getAllVenues_ReturnsListOfVenues()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.036"/>
   <testcase name="getVenueById_WhenExists_ReturnsVenue()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.002"/>
-  <testcase name="deleteVenue_CallsRepositoryDelete()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.001"/>
-  <testcase name="saveVenue_ReturnsSavedVenue()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.001"/>
-  <testcase name="getVenueById_WhenNotExists_ReturnsEmpty()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.001"/>
+  <testcase name="deleteVenue_CallsRepositoryDelete()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.002"/>
+  <testcase name="saveVenue_ReturnsSavedVenue()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.002"/>
+  <testcase name="getVenueById_WhenNotExists_ReturnsEmpty()" classname="com.eventflow.backend.service.VenueServiceTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
