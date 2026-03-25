@@ -16,65 +16,80 @@ function Navbar() {
             left: 0,
             right: 0,
             zIndex: 1000,
-            backgroundColor: "#0f0f0f",
+            backdropFilter: "blur(10px)",
+            background: "rgba(15,15,15,0.75)",
             borderBottom: "1px solid #222",
-            height: "56px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 24px",
         }}>
-            {/* Logo */}
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div style={{
-                    width: "36px", height: "36px", borderRadius: "10px",
-                    background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "18px"
-                }}>📍</div>
-                <span style={{ fontSize: "18px", fontWeight: "700", color: "white" }}>
-                    Event<span style={{ color: "#6c63ff" }}>Flow</span>
-                </span>
-            </div>
+            {/* CENTERED CONTAINER */}
+            <div style={{
+                maxWidth: "1400px",
+                margin: "0 auto",
+                height: "72px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "0 32px"
+            }}>
 
-            {/* Nav Links */}
-            <div style={{ display: "flex", gap: "32px" }}>
-                {navLinks.map(link => (
-                    <Link
-                        key={link.path}
-                        to={link.path}
-                        style={{
-                            color: location.pathname === link.path ? "#6c63ff" : "#9ca3af",
-                            textDecoration: "none",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            transition: "color 0.2s"
-                        }}
-                    >
-                        {link.label}
+                {/* LEFT — LOGO */}
+                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                    <div style={{
+                        width: "42px",
+                        height: "42px",
+                        borderRadius: "12px",
+                        background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
+                        boxShadow: "0 4px 14px rgba(108,99,255,0.4)"
+                    }}/>
+                    <span style={{ fontSize: "22px", fontWeight: "700", color: "white" }}>
+                        Event<span style={{ color: "#6c63ff" }}>Flow</span>
+                    </span>
+                </div>
+
+                {/* CENTER — NAV LINKS */}
+                <div style={{ display: "flex", gap: "36px" }}>
+                    {navLinks.map(link => (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            style={{
+                                color: location.pathname === link.path ? "#6c63ff" : "#9ca3af",
+                                textDecoration: "none",
+                                fontSize: "16px",
+                                fontWeight: "600",
+                                letterSpacing: "0.3px",
+                                transition: "all 0.2s ease"
+                            }}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
+
+                {/* RIGHT — AUTH */}
+                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <Link to="/login" style={{
+                        color: "#e5e7eb",
+                        textDecoration: "none",
+                        fontSize: "15px",
+                        fontWeight: "600"
+                    }}>
+                        Log in
                     </Link>
-                ))}
-            </div>
 
-            {/* Auth Buttons */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <Link to="/login" style={{
-                    color: "white", textDecoration: "none",
-                    fontSize: "14px", fontWeight: "500"
-                }}>
-                    Log in
-                </Link>
-                <Link to="/register" style={{
-                    backgroundColor: "#6c63ff",
-                    color: "white",
-                    textDecoration: "none",
-                    padding: "8px 18px",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "600"
-                }}>
-                    Sign up
-                </Link>
+                    <Link to="/register" style={{
+                        background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
+                        color: "white",
+                        textDecoration: "none",
+                        padding: "10px 18px",
+                        borderRadius: "10px",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                        boxShadow: "0 4px 14px rgba(108,99,255,0.35)"
+                    }}>
+                        Sign up
+                    </Link>
+                </div>
+
             </div>
         </nav>
     );
