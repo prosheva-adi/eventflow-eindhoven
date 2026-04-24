@@ -51,7 +51,7 @@ public class Event {
     @Column(name = "organiser_name")
     private String organiserName;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "event_categories", joinColumns = @JoinColumn(name = "event_id"))
     @Column(name = "category")
     @Enumerated(EnumType.STRING)

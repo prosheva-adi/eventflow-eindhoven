@@ -1,12 +1,24 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Navbar() {
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const isLoggedIn = !!localStorage.getItem("token");
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+    };
 
     const navLinks = [
         { label: "Map", path: "/" },
         { label: "Events", path: "/events" },
         { label: "Saved", path: "/saved" },
+        { label: "Venues", path: "/venues" },
+
     ];
 
     return (
@@ -20,7 +32,6 @@ function Navbar() {
             background: "rgba(15,15,15,0.75)",
             borderBottom: "1px solid #222",
         }}>
-            {/* CENTERED CONTAINER */}
             <div style={{
                 maxWidth: "1400px",
                 margin: "0 auto",
@@ -67,27 +78,48 @@ function Navbar() {
 
                 {/* RIGHT — AUTH */}
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                    <Link to="/login" style={{
-                        color: "#e5e7eb",
-                        textDecoration: "none",
-                        fontSize: "15px",
-                        fontWeight: "600"
-                    }}>
-                        Log in
-                    </Link>
-
-                    <Link to="/register" style={{
-                        background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
-                        color: "white",
-                        textDecoration: "none",
-                        padding: "10px 18px",
-                        borderRadius: "10px",
-                        fontSize: "15px",
-                        fontWeight: "700",
-                        boxShadow: "0 4px 14px rgba(108,99,255,0.35)"
-                    }}>
-                        Sign up
-                    </Link>
+                    {isLoggedIn ? (
+                        <>
+                            <span style={{ color: "#9ca3af", fontSize: "15px" }}>
+                                Hi, <span style={{ color: "white", fontWeight: "600" }}>{user?.username}</span>
+                            </span>
+                            <button onClick={handleLogout} style={{
+                                background: "transparent",
+                                color: "#e5e7eb",
+                                border: "1px solid #333",
+                                padding: "10px 18px",
+                                borderRadius: "10px",
+                                fontSize: "15px",
+                                fontWeight: "600",
+                                cursor: "pointer"
+                            }}>
+                                Log out
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" style={{
+                                color: "#e5e7eb",
+                                textDecoration: "none",
+                                fontSize: "15px",
+                                fontWeight: "600"
+                            }}>
+                                Log in
+                            </Link>
+                            <Link to="/register" style={{
+                                background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
+                                color: "white",
+                                textDecoration: "none",
+                                padding: "10px 18px",
+                                borderRadius: "10px",
+                                fontSize: "15px",
+                                fontWeight: "700",
+                                boxShadow: "0 4px 14px rgba(108,99,255,0.35)"
+                            }}>
+                                Sign up
+                            </Link>
+                        </>
+                    )}
                 </div>
 
             </div>

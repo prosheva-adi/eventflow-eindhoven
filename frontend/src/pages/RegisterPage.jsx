@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 
 function RegisterPage() {
@@ -7,16 +8,42 @@ function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            setError("Passwords do not match");
             return;
         }
 
-        alert("Registration coming soon");
+        setLoading(true);
+        try {
+            const response = await axios.post("http://localhost:8080/api/auth/register", {
+                username,
+                email,
+                password
+            });
+
+            // Store token and user info
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify({
+                userId: response.data.userId,
+                username: response.data.username,
+                email: response.data.email
+            }));
+
+            navigate("/");
+        } catch (err) {
+            setError(err.response?.data?.message || "Registration failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -42,13 +69,23 @@ function RegisterPage() {
                     <h2 style={{ textAlign: "center", marginBottom: "8px" }}>
                         Create account
                     </h2>
-                    <p style={{
-                        textAlign: "center",
-                        color: "#9ca3af",
-                        marginBottom: "32px"
-                    }}>
+                    <p style={{ textAlign: "center", color: "#9ca3af", marginBottom: "32px" }}>
                         Join EventFlow today
                     </p>
+
+                    {error && (
+                        <div style={{
+                            background: "#2a1a1a",
+                            border: "1px solid #ff4d4d",
+                            color: "#ff4d4d",
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            marginBottom: "18px",
+                            fontSize: "14px"
+                        }}>
+                            {error}
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit}>
                         <div style={{ marginBottom: "18px" }}>
@@ -99,20 +136,18 @@ function RegisterPage() {
                             />
                         </div>
 
-                        <button type="submit" style={buttonStyle}>
-                            Create account
+                        <button type="submit" disabled={loading} style={{
+                            ...buttonStyle,
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? "not-allowed" : "pointer"
+                        }}>
+                            {loading ? "Creating account..." : "Create account"}
                         </button>
                     </form>
 
-                    <p style={{
-                        textAlign: "center",
-                        marginTop: "24px",
-                        color: "#9ca3af"
-                    }}>
+                    <p style={{ textAlign: "center", marginTop: "24px", color: "#9ca3af" }}>
                         Already have an account?{" "}
-                        <Link to="/login" style={{ color: "#6c63ff" }}>
-                            Sign in
-                        </Link>
+                        <Link to="/login" style={{ color: "#6c63ff" }}>Sign in</Link>
                     </p>
 
                 </div>
@@ -141,7 +176,6 @@ const buttonStyle = {
     color: "white",
     fontSize: "15px",
     fontWeight: "600",
-    cursor: "pointer"
 };
 
 export default RegisterPage;

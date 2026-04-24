@@ -4,29 +4,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="">
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="updated pipeline">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/dto/AuthRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/dto/AuthResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/dto/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/security/JwtAuthFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/security/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/security/UserDetailsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/axios.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/EventDetailPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/VenueDetailPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/VenuesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.controller.EventControllerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.controller.EventControllerTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.controller.VenueControllerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.controller.VenueControllerTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.EventServiceTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.EventServiceTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.UserServiceTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.UserServiceTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.VenueServiceTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.VenueServiceTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.controller.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.controller.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.service.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.service.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.controller.EventControllerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.controller.EventControllerTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.controller.VenueControllerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.controller.VenueControllerTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.EventServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.EventServiceTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.UserServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.UserServiceTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.VenueServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.VenueServiceTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/binary/results.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/controller/EventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/controller/VenueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/controller/VenueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/model/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/EventMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/EventMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/EventsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/EventsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +58,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/backend">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -109,6 +129,7 @@
     &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;groundwork&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/prosh/eventflow-eindhoven&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
@@ -120,7 +141,7 @@
       <recent name="C:\Users\prosh\eventflow-eindhoven\frontend\src\components" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'backend.test'">
+  <component name="RunManager" selected="Spring Boot.BackendApplication">
     <configuration name="Tests in 'backend.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -207,7 +228,22 @@
       <workItem from="1774344901694" duration="3645000" />
       <workItem from="1774353080829" duration="5385000" />
       <workItem from="1774430106919" duration="6185000" />
-      <workItem from="1774476936868" duration="1845000" />
+      <workItem from="1774476936868" duration="4524000" />
+      <workItem from="1774512675795" duration="3087000" />
+      <workItem from="1774521558823" duration="528000" />
+      <workItem from="1774896594273" duration="55000" />
+      <workItem from="1774945131888" duration="787000" />
+      <workItem from="1775311823488" duration="6775000" />
+      <workItem from="1776094921204" duration="602000" />
+      <workItem from="1776165196056" duration="784000" />
+      <workItem from="1776174711087" duration="537000" />
+      <workItem from="1776277098501" duration="5142000" />
+      <workItem from="1776290915204" duration="2072000" />
+      <workItem from="1776327861937" duration="605000" />
+      <workItem from="1776412997159" duration="1101000" />
+      <workItem from="1776788598283" duration="6805000" />
+      <workItem from="1776854003691" duration="596000" />
+      <workItem from="1776947303401" duration="2893000" />
     </task>
     <task id="LOCAL-00001" summary="Add database migration and PostgreSQL connection">
       <option name="closed" value="true" />
@@ -305,7 +341,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774436144538</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="updated pipeline">
+      <option name="closed" value="true" />
+      <created>1774482060565</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1774482060565</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,6 +368,7 @@
     <MESSAGE value="Added Unit tests for services and controllers" />
     <MESSAGE value="Created the LoginPage, Register page and Events Page" />
     <MESSAGE value="Unversioned Files commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Unversioned Files commit" />
+    <MESSAGE value="updated pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated pipeline" />
   </component>
 </project>

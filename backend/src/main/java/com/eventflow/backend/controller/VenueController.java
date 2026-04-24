@@ -30,6 +30,7 @@ public class VenueController {
 
     @PostMapping
     public Venue createVenue(@RequestBody Venue venue) {
+        System.out.println("HIT CREATE VENUE"); // 👈 add this
         return venueService.saveVenue(venue);
     }
 
@@ -37,5 +38,27 @@ public class VenueController {
     public ResponseEntity<Void> deleteVenue(@PathVariable UUID id) {
         venueService.deleteVenue(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Venue> updateVenue(
+            @PathVariable UUID id,
+            @RequestBody Venue updatedVenue
+    ) {
+        return venueService.getVenueById(id)
+                .map(existing -> {
+                    existing.setName(updatedVenue.getName());
+                    existing.setDescription(updatedVenue.getDescription());
+                    existing.setAddress(updatedVenue.getAddress());
+                    existing.setLatitude(updatedVenue.getLatitude());
+                    existing.setLongitude(updatedVenue.getLongitude());
+                    existing.setImageUrl(updatedVenue.getImageUrl());
+                    existing.setWebsite(updatedVenue.getWebsite());
+                    existing.setCategory(updatedVenue.getCategory());
+
+                    Venue saved = venueService.saveVenue(existing);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

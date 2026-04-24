@@ -1,14 +1,37 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import Navbar from "../components/Navbar";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("Login coming soon");
+        setError("");
+        setLoading(true);
+
+        try {
+            const response = await api.post("/api/auth/login", { email, password });
+
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify({
+                userId: response.data.userId,
+                username: response.data.username,
+                email: response.data.email
+            }));
+
+            navigate("/");
+        } catch (err) {
+            setError(err.response?.data?.message || "Invalid email or password.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -30,17 +53,26 @@ function LoginPage() {
                     borderRadius: "12px",
                     border: "1px solid #262626"
                 }}>
-
                     <h2 style={{ textAlign: "center", marginBottom: "8px" }}>
                         Welcome back
                     </h2>
-                    <p style={{
-                        textAlign: "center",
-                        color: "#9ca3af",
-                        marginBottom: "32px"
-                    }}>
+                    <p style={{ textAlign: "center", color: "#9ca3af", marginBottom: "32px" }}>
                         Sign in to your account
                     </p>
+
+                    {error && (
+                        <div style={{
+                            background: "#2a1a1a",
+                            border: "1px solid #ff4d4d",
+                            color: "#ff4d4d",
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            marginBottom: "18px",
+                            fontSize: "14px"
+                        }}>
+                            {error}
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit}>
                         <div style={{ marginBottom: "18px" }}>
@@ -67,20 +99,18 @@ function LoginPage() {
                             />
                         </div>
 
-                        <button type="submit" style={buttonStyle}>
-                            Sign in
+                        <button type="submit" disabled={loading} style={{
+                            ...buttonStyle,
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? "not-allowed" : "pointer"
+                        }}>
+                            {loading ? "Signing in..." : "Sign in"}
                         </button>
                     </form>
 
-                    <p style={{
-                        textAlign: "center",
-                        marginTop: "24px",
-                        color: "#9ca3af"
-                    }}>
+                    <p style={{ textAlign: "center", marginTop: "24px", color: "#9ca3af" }}>
                         Don't have an account?{" "}
-                        <Link to="/register" style={{ color: "#6c63ff" }}>
-                            Sign up
-                        </Link>
+                        <Link to="/register" style={{ color: "#6c63ff" }}>Sign up</Link>
                     </p>
 
                 </div>
@@ -109,7 +139,6 @@ const buttonStyle = {
     color: "white",
     fontSize: "15px",
     fontWeight: "600",
-    cursor: "pointer"
 };
 
 export default LoginPage;
