@@ -68,7 +68,7 @@ export default function EventsPage() {
     useEffect(() => {
         api.get("/api/events")
             .then(res => {
-                console.log("EVENTS FROM API:", res.data); // 👈 ADD THIS
+
                 setEvents(res.data);
             })
             .catch(err => {

@@ -1,6 +1,8 @@
 package com.eventflow.backend.controller;
 
 import com.eventflow.backend.model.Event;
+import com.eventflow.backend.security.JwtAuthFilter;
+import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,12 @@ class EventControllerTest {
 
     @MockitoBean
     private EventService eventService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
+    @MockitoBean
+    private JwtAuthFilter jwtAuthFilter;
 
     private Event testEvent;
     private UUID testId;

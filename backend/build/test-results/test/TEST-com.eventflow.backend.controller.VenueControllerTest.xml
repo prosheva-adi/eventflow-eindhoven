@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.eventflow.backend.controller.VenueControllerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-03-25T23:15:01.970Z" hostname="DESKTOP-O923T9V" time="0.049">
+<testsuite name="com.eventflow.backend.controller.VenueControllerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-04-24T08:08:42.775Z" hostname="DESKTOP-O923T9V" time="0.204">
   <properties/>
-  <testcase name="deleteVenue_Returns204()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.009"/>
-  <testcase name="createVenue_Returns200WithCreatedVenue()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.013"/>
-  <testcase name="getVenueById_WhenExists_Returns200()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.009"/>
+  <testcase name="deleteVenue_Returns204()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.094"/>
+  <testcase name="createVenue_Returns200WithCreatedVenue()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.081"/>
+  <testcase name="getVenueById_WhenExists_Returns200()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.006"/>
   <testcase name="getVenueById_WhenNotExists_Returns404()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.005"/>
-  <testcase name="getAllVenues_Returns200WithList()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.009"/>
-  <system-out><![CDATA[2026-03-26T00:15:01.710+01:00  INFO 21252 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.eventflow.backend.controller.VenueControllerTest]: VenueControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-03-26T00:15:01.721+01:00  INFO 21252 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.eventflow.backend.BackendApplication for test class com.eventflow.backend.controller.VenueControllerTest
+  <testcase name="getAllVenues_Returns200WithList()" classname="com.eventflow.backend.controller.VenueControllerTest" time="0.013"/>
+  <system-out><![CDATA[10:08:40.672 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.eventflow.backend.controller.VenueControllerTest]: VenueControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+10:08:40.774 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.eventflow.backend.BackendApplication for test class com.eventflow.backend.controller.VenueControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -18,19 +18,19 @@
 
  :: Spring Boot ::               (v3.5.11)
 
-2026-03-26T00:15:01.747+01:00  INFO 21252 --- [    Test worker] c.e.b.controller.VenueControllerTest     : Starting VenueControllerTest using Java 18.0.2 with PID 21252 (started by prosh in C:\Users\prosh\eventflow-eindhoven\backend)
-2026-03-26T00:15:01.748+01:00  INFO 21252 --- [    Test worker] c.e.b.controller.VenueControllerTest     : No active profile set, falling back to 1 default profile: "default"
-2026-03-26T00:15:01.950+01:00  WARN 21252 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+2026-04-24T10:08:41.073+02:00  INFO 15468 --- [    Test worker] c.e.b.controller.VenueControllerTest     : Starting VenueControllerTest using Java 18.0.2 with PID 15468 (started by prosh in C:\Users\prosh\eventflow-eindhoven\backend)
+2026-04-24T10:08:41.074+02:00  INFO 15468 --- [    Test worker] c.e.b.controller.VenueControllerTest     : No active profile set, falling back to 1 default profile: "default"
+2026-04-24T10:08:42.615+02:00  WARN 15468 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: fc519034-59e9-4987-b7d2-26a8c95855ee
+Using generated security password: f3b49be9-e101-476b-b10c-24447d1e8bd8
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-03-26T00:15:01.951+01:00  INFO 21252 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-03-26T00:15:01.963+01:00  INFO 21252 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-03-26T00:15:01.963+01:00  INFO 21252 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-03-26T00:15:01.963+01:00  INFO 21252 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2026-03-26T00:15:01.969+01:00  INFO 21252 --- [    Test worker] c.e.b.controller.VenueControllerTest     : Started VenueControllerTest in 0.245 seconds (process running for 3.586)
+2026-04-24T10:08:42.622+02:00  INFO 15468 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-24T10:08:42.734+02:00  INFO 15468 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-04-24T10:08:42.734+02:00  INFO 15468 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-04-24T10:08:42.736+02:00  INFO 15468 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-04-24T10:08:42.768+02:00  INFO 15468 --- [    Test worker] c.e.b.controller.VenueControllerTest     : Started VenueControllerTest in 1.938 seconds (process running for 2.695)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

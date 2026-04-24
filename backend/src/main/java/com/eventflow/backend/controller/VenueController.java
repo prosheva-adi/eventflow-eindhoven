@@ -30,7 +30,7 @@ public class VenueController {
 
     @PostMapping
     public Venue createVenue(@RequestBody Venue venue) {
-        System.out.println("HIT CREATE VENUE"); // 👈 add this
+
         return venueService.saveVenue(venue);
     }
 
