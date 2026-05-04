@@ -23,7 +23,8 @@ function LoginPage() {
             localStorage.setItem("user", JSON.stringify({
                 userId: response.data.userId,
                 username: response.data.username,
-                email: response.data.email
+                email: response.data.email,
+                role: response.data.role
             }));
 
             navigate("/");

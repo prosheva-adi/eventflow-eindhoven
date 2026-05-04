@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../components/Navbar";
+import api from "../api/axios.js";
 
 function RegisterPage() {
     const [username, setUsername] = useState("");
@@ -24,7 +24,7 @@ function RegisterPage() {
 
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:8080/api/auth/register", {
+            const response = await api.post("/api/auth/register", {
                 username,
                 email,
                 password
@@ -35,7 +35,8 @@ function RegisterPage() {
             localStorage.setItem("user", JSON.stringify({
                 userId: response.data.userId,
                 username: response.data.username,
-                email: response.data.email
+                email: response.data.email,
+                role: response.data.role   // add this
             }));
 
             navigate("/");
