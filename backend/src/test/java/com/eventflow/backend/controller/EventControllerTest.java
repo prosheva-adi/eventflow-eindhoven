@@ -4,6 +4,7 @@ import com.eventflow.backend.model.Event;
 import com.eventflow.backend.security.JwtAuthFilter;
 import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.EventService;
+import com.eventflow.backend.service.LikedEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ class EventControllerTest {
 
     @MockitoBean
     private EventService eventService;
+
+    @MockitoBean
+    private LikedEventService likedEventService; // ← added: EventController now depends on this
 
     @MockitoBean
     private JwtUtil jwtUtil;
