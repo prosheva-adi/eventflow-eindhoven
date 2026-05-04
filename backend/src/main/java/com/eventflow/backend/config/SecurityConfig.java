@@ -28,12 +28,25 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // Public
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+
+                        // Like endpoints — any logged-in user (must come BEFORE the broad event rules)
+                        .requestMatchers(HttpMethod.GET,    "/api/events/liked").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/events/*/like").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/events/*/like").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/events/*/like").hasAnyRole("USER", "ADMIN")
+
+                        // Event CRUD — public read, admin write
+                        .requestMatchers(HttpMethod.GET,    "/api/events/**").permitAll()
                         .requestMatchers(HttpMethod.POST,   "/api/events/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/api/events/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
+
+                        // Venues — admin only
                         .requestMatchers("/api/venues/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

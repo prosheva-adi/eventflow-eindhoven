@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth"; // 👇 ADDED
-import api from "../api/axios";             // 👇 ADDED (swap fetch for api so token is sent)
+import { useAuth } from "../hooks/useAuth";
+import api from "../api/axios";
 
 function sanitizeUrl(url) {
     if (!url) return null;
@@ -23,6 +23,17 @@ const styles = `
         from { opacity: 0; }
         to   { opacity: 1; }
     }
+    @keyframes heartPop {
+        0%   { transform: scale(1); }
+        30%  { transform: scale(1.4); }
+        60%  { transform: scale(0.85); }
+        100% { transform: scale(1); }
+    }
+    @keyframes heartUnpop {
+        0%   { transform: scale(1); }
+        50%  { transform: scale(0.8); }
+        100% { transform: scale(1); }
+    }
 
     .event-detail * { box-sizing: border-box; margin: 0; padding: 0; }
     .event-detail { min-height: 100vh; background: #0d0d0d; color: #f0ede8; font-family: 'DM Sans', sans-serif; }
@@ -30,6 +41,7 @@ const styles = `
     .hero { position: relative; height: 480px; overflow: hidden; }
     .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; animation: fadeIn 0.6s ease; filter: brightness(0.75); }
     .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to top, #0d0d0d 0%, rgba(13,13,13,0.6) 50%, transparent 100%); }
+
     .back-btn {
         position: absolute; top: 28px; left: 28px;
         display: flex; align-items: center; gap: 6px;
@@ -50,11 +62,49 @@ const styles = `
         color: #9d97ff; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
     }
 
+    /* ── Title row with like button ── */
+    .title-row {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        gap: 20px; margin-bottom: 36px;
+    }
     .event-title {
         font-family: 'DM Serif Display', serif;
         font-size: clamp(32px, 5vw, 52px); font-weight: 400; line-height: 1.1;
-        margin-bottom: 36px; color: #f5f2ed; letter-spacing: -0.5px;
+        color: #f5f2ed; letter-spacing: -0.5px; flex: 1;
     }
+
+    /* ── Like button ── */
+    .like-btn {
+        display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+        margin-top: 6px;
+        padding: 10px 20px; border-radius: 100px; cursor: pointer;
+        font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600; letter-spacing: 0.3px;
+        transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+        border: 1px solid #2a2a2a;
+        background: #161616;
+        color: #555;
+    }
+    .like-btn:hover:not(.like-btn--loading) {
+        background: rgba(224,92,122,0.1);
+        border-color: rgba(224,92,122,0.4);
+        color: #e05c7a;
+        transform: translateY(-1px);
+    }
+    .like-btn--liked {
+        background: rgba(224,92,122,0.12);
+        border-color: rgba(224,92,122,0.45);
+        color: #e05c7a;
+    }
+    .like-btn--liked:hover:not(.like-btn--loading) {
+        background: rgba(224,92,122,0.06);
+        border-color: rgba(224,92,122,0.2);
+        color: #a04458;
+        transform: translateY(-1px);
+    }
+    .like-btn--loading { cursor: not-allowed; opacity: 0.5; }
+    .like-btn-icon { font-size: 16px; line-height: 1; display: inline-block; }
+    .like-btn-icon--pop   { animation: heartPop   0.35s ease; }
+    .like-btn-icon--unpop { animation: heartUnpop 0.25s ease; }
 
     .divider { height: 1px; background: linear-gradient(to right, #2a2a2a, transparent); margin-bottom: 32px; }
 
@@ -80,7 +130,6 @@ const styles = `
     .ticket-btn:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(108,99,255,0.45); }
     .ticket-btn:active { transform: translateY(0); }
 
-    /* 👇 ADDED — admin action buttons */
     .admin-actions { display: flex; gap: 12px; margin-top: 40px; padding-top: 32px; border-top: 1px solid #1e1e1e; }
     .edit-btn {
         display: inline-flex; align-items: center; gap: 6px;
@@ -108,6 +157,7 @@ const styles = `
         .content { padding: 0 20px 80px; }
         .info-grid { grid-template-columns: 1fr 1fr; }
         .admin-actions { flex-direction: column; }
+        .like-btn span:last-child { display: none; }
     }
     @media (max-width: 400px) {
         .info-grid { grid-template-columns: 1fr; }
@@ -117,22 +167,54 @@ const styles = `
 export default function EventDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAdmin } = useAuth(); // 👇 ADDED
+    const { isAdmin, isLoggedIn } = useAuth();
 
-    const [event, setEvent] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [deleting, setDeleting] = useState(false); // 👇 ADDED
+    const [event, setEvent]         = useState(null);
+    const [loading, setLoading]     = useState(true);
+    const [error, setError]         = useState(null);
+    const [deleting, setDeleting]   = useState(false);
 
+    const [liked, setLiked]             = useState(false);
+    const [likeLoading, setLikeLoading] = useState(false);
+    const [iconAnim, setIconAnim]       = useState("");
+
+    // Fetch event
     useEffect(() => {
-        // 👇 CHANGED — use api instead of fetch so the auth token is included
         api.get(`/api/events/${id}`)
             .then(res => setEvent(res.data))
             .catch(() => setError("Event not found"))
             .finally(() => setLoading(false));
     }, [id]);
 
-    // 👇 ADDED
+    // Check liked status once event is loaded
+    useEffect(() => {
+        if (!isLoggedIn || !event) return;
+        api.get(`/api/events/${id}/like`)
+            .then(res => setLiked(res.data.liked))
+            .catch(() => {});
+    }, [id, event, isLoggedIn]);
+
+    const handleLikeToggle = async () => {
+        if (likeLoading) return;
+        setLikeLoading(true);
+        const wasLiked = liked;
+        setLiked(!wasLiked);
+        setIconAnim(wasLiked ? "unpop" : "pop");
+        setTimeout(() => setIconAnim(""), 400);
+        try {
+            if (wasLiked) {
+                await api.delete(`/api/events/${id}/like`);
+            } else {
+                await api.post(`/api/events/${id}/like`);
+            }
+        } catch (err) {
+            console.error("Like toggle failed:", err);
+            setLiked(wasLiked);
+        } finally {
+            setLikeLoading(false);
+        }
+    };
+
     const handleDelete = async () => {
         if (!window.confirm("Delete this event? This cannot be undone.")) return;
         setDeleting(true);
@@ -198,7 +280,23 @@ export default function EventDetailPage() {
                         </div>
                     )}
 
-                    <h1 className="event-title">{event.name}</h1>
+                    {/* Title + like button side by side */}
+                    <div className="title-row">
+                        <h1 className="event-title">{event.name}</h1>
+                        {isLoggedIn && (
+                            <button
+                                className={`like-btn${liked ? " like-btn--liked" : ""}${likeLoading ? " like-btn--loading" : ""}`}
+                                onClick={handleLikeToggle}
+                                title={liked ? "Remove from saved" : "Save event"}
+                            >
+                                <span className={`like-btn-icon${iconAnim === "pop" ? " like-btn-icon--pop" : iconAnim === "unpop" ? " like-btn-icon--unpop" : ""}`}>
+                                    {liked ? "♥" : "♡"}
+                                </span>
+                                <span>{liked ? "Saved" : "Save"}</span>
+                            </button>
+                        )}
+                    </div>
+
                     <div className="divider" />
 
                     <div className="info-grid">
@@ -223,7 +321,6 @@ export default function EventDetailPage() {
                         </a>
                     )}
 
-                    {/* 👇 ADDED — only visible to admins */}
                     {isAdmin && (
                         <div className="admin-actions">
                             <button className="edit-btn" onClick={() => navigate(`/events/${id}/edit`)}>
