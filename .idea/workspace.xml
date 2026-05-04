@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="Fixed fronend Node version and gradlew permissions in CI">
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="added liked user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/VenueDetailPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/VenueDetailPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/VenuesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/VenuesPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +22,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/backend">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -37,6 +42,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -56,38 +63,115 @@
     &quot;accountId&quot;: &quot;e0b2109a-457e-41af-b800-169452b59e1f&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="3B7agdUp0vfM14AqssMaT7BA7ic" />
+  <component name="ProjectId" id="3BGWT8Q0lMUVymyGsthEijbcYxq" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.backend [:org.example.Main.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tests in 'backend.test'.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tests in 'com.eventflow.backend.controller'.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;groundwork&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/prosh/eventflow-eindhoven&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/prosh/eventflow-eindhoven/backend/src/main/java/org/example/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\prosh\eventflow-eindhoven\frontend\src\components" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.Tests in 'backend.test'">
+    <configuration name="Tests in 'backend.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'com.eventflow.backend.controller'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.eventflow.backend.controller.*&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.eventflow.backend.BackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Tests in 'backend.test'" />
+        <item itemvalue="Gradle.Tests in 'com.eventflow.backend.controller'" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -98,91 +182,218 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="529d184f-a0ed-4b2d-8555-0e21eaf1c417" name="Changes" comment="" />
-      <created>1773842675976</created>
+      <changelist id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="" />
+      <created>1774115892201</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1773842675976</updated>
-      <workItem from="1773842677854" duration="1515000" />
-      <workItem from="1773868294768" duration="797000" />
-      <workItem from="1773869114935" duration="37000" />
-      <workItem from="1773869167772" duration="1649000" />
-      <workItem from="1773922742420" duration="144000" />
-      <workItem from="1773922906653" duration="57000" />
-      <workItem from="1773923027881" duration="127000" />
-      <workItem from="1773923171010" duration="1611000" />
+      <updated>1774115892201</updated>
+      <workItem from="1774115894244" duration="9986000" />
+      <workItem from="1774279238378" duration="9365000" />
+      <workItem from="1774344901694" duration="3645000" />
+      <workItem from="1774353080829" duration="5385000" />
+      <workItem from="1774430106919" duration="6185000" />
+      <workItem from="1774476936868" duration="4524000" />
+      <workItem from="1774512675795" duration="3087000" />
+      <workItem from="1774521558823" duration="528000" />
+      <workItem from="1774896594273" duration="55000" />
+      <workItem from="1774945131888" duration="787000" />
+      <workItem from="1775311823488" duration="6775000" />
+      <workItem from="1776094921204" duration="602000" />
+      <workItem from="1776165196056" duration="784000" />
+      <workItem from="1776174711087" duration="537000" />
+      <workItem from="1776277098501" duration="5142000" />
+      <workItem from="1776290915204" duration="2072000" />
+      <workItem from="1776327861937" duration="605000" />
+      <workItem from="1776412997159" duration="1101000" />
+      <workItem from="1776788598283" duration="6805000" />
+      <workItem from="1776854003691" duration="596000" />
+      <workItem from="1776947303401" duration="2893000" />
+      <workItem from="1777016964045" duration="2639000" />
+      <workItem from="1777031223924" duration="1174000" />
+      <workItem from="1777032786528" duration="1890000" />
+      <workItem from="1777476347422" duration="300000" />
+      <workItem from="1777536034161" duration="10000" />
+      <workItem from="1777844802872" duration="6009000" />
+      <workItem from="1777927530067" duration="4314000" />
     </task>
-    <task id="LOCAL-00001" summary="Initial backend setup">
+    <task id="LOCAL-00001" summary="Add database migration and PostgreSQL connection">
       <option name="closed" value="true" />
-      <created>1773868093855</created>
+      <created>1774116884413</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1773868093855</updated>
+      <updated>1774116884413</updated>
     </task>
-    <task id="LOCAL-00002" summary="Initial backend setup">
+    <task id="LOCAL-00002" summary="Remove application.properties from tracking">
       <option name="closed" value="true" />
-      <created>1773868193307</created>
+      <created>1774117060893</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1773868193307</updated>
+      <updated>1774117060893</updated>
     </task>
-    <task id="LOCAL-00003" summary="Add Spring Boot application setup">
+    <task id="LOCAL-00003" summary="Add JPA entities">
       <option name="closed" value="true" />
-      <created>1773868740476</created>
+      <created>1774124815173</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1773868740476</updated>
+      <updated>1774124815173</updated>
     </task>
-    <task id="LOCAL-00004" summary="Landing page">
+    <task id="LOCAL-00004" summary="Add repositories">
       <option name="closed" value="true" />
-      <created>1773923699867</created>
+      <created>1774128121201</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1773923699867</updated>
+      <updated>1774128121201</updated>
     </task>
-    <task id="LOCAL-00005" summary="Added CI/CD pipeline">
+    <task id="LOCAL-00005" summary="Add services and event categories migration">
       <option name="closed" value="true" />
-      <created>1773924331763</created>
+      <created>1774129328772</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1773924331763</updated>
+      <updated>1774129328772</updated>
     </task>
-    <task id="LOCAL-00006" summary="Fixed fronend Node version and gradlew permissions in CI">
+    <task id="LOCAL-00006" summary="Update CI pipeline to run on all branches">
       <option name="closed" value="true" />
-      <created>1773924629174</created>
+      <created>1774279371083</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1773924629174</updated>
+      <updated>1774279371083</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Adding controllers">
+      <option name="closed" value="true" />
+      <created>1774281483511</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1774281483511</updated>
+    </task>
+    <task id="LOCAL-00008" summary="disabling Spring Security for now and creating CORS">
+      <option name="closed" value="true" />
+      <created>1774285427807</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1774285427807</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Basic pages and map">
+      <option name="closed" value="true" />
+      <created>1774349137764</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1774349137764</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added Unit tests for services and controllers">
+      <option name="closed" value="true" />
+      <created>1774431783121</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1774431783121</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Created the LoginPage, Register page and Events Page">
+      <option name="closed" value="true" />
+      <created>1774436125362</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1774436125362</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Unversioned Files commit">
+      <option name="closed" value="true" />
+      <created>1774436144538</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1774436144538</updated>
+    </task>
+    <task id="LOCAL-00013" summary="updated pipeline">
+      <option name="closed" value="true" />
+      <created>1774482060565</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1774482060565</updated>
+    </task>
+    <task id="LOCAL-00014" summary="venues page and added PUT for events">
+      <option name="closed" value="true" />
+      <created>1777017237883</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1777017237883</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fixed the cotnroller tests and axios">
+      <option name="closed" value="true" />
+      <created>1777018155569</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1777018155569</updated>
+    </task>
+    <task id="LOCAL-00016" summary="made events details and evtns page prettier">
+      <option name="closed" value="true" />
+      <created>1777847182078</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1777847182078</updated>
+    </task>
+    <task id="LOCAL-00017" summary="added role enum and role column">
+      <option name="closed" value="true" />
+      <created>1777847584085</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1777847584085</updated>
+    </task>
+    <task id="LOCAL-00018" summary="restricting files for normal users and admin users">
+      <option name="closed" value="true" />
+      <created>1777927603227</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1777927603227</updated>
+    </task>
+    <task id="LOCAL-00019" summary="added liked user">
+      <option name="closed" value="true" />
+      <created>1777931285717</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1777931285717</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial backend setup" />
-    <MESSAGE value="Add Spring Boot application setup" />
-    <MESSAGE value="Landing page" />
-    <MESSAGE value="Added CI/CD pipeline" />
-    <MESSAGE value="Fixed fronend Node version and gradlew permissions in CI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed fronend Node version and gradlew permissions in CI" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/main/java/org/example/Main.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Add database migration and PostgreSQL connection" />
+    <MESSAGE value="Remove application.properties from tracking" />
+    <MESSAGE value="Add JPA entities" />
+    <MESSAGE value="Add repositories" />
+    <MESSAGE value="Add services and event categories migration" />
+    <MESSAGE value="Update CI pipeline to run on all branches" />
+    <MESSAGE value="Adding controllers" />
+    <MESSAGE value="disabling Spring Security for now and creating CORS" />
+    <MESSAGE value="Basic pages and map" />
+    <MESSAGE value="Added Unit tests for services and controllers" />
+    <MESSAGE value="Created the LoginPage, Register page and Events Page" />
+    <MESSAGE value="Unversioned Files commit" />
+    <MESSAGE value="updated pipeline" />
+    <MESSAGE value="venues page and added PUT for events" />
+    <MESSAGE value="fixed the cotnroller tests and axios" />
+    <MESSAGE value="made events details and evtns page prettier" />
+    <MESSAGE value="added role enum and role column" />
+    <MESSAGE value="restricting files for normal users and admin users" />
+    <MESSAGE value="added liked user" />
+    <option name="LAST_COMMIT_MESSAGE" value="added liked user" />
   </component>
 </project>
