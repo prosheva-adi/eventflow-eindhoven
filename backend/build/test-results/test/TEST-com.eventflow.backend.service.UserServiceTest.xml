@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.eventflow.backend.service.UserServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-04-24T08:08:43.433Z" hostname="DESKTOP-O923T9V" time="0.042">
+<testsuite name="com.eventflow.backend.service.UserServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-05-04T22:01:19.285Z" hostname="DESKTOP-O923T9V" time="0.044">
   <properties/>
-  <testcase name="getUserByEmail_WhenExists_ReturnsUser()" classname="com.eventflow.backend.service.UserServiceTest" time="0.038"/>
+  <testcase name="getUserByEmail_WhenExists_ReturnsUser()" classname="com.eventflow.backend.service.UserServiceTest" time="0.04"/>
   <testcase name="saveUser_ReturnsSavedUser()" classname="com.eventflow.backend.service.UserServiceTest" time="0.001"/>
   <testcase name="getUserById_WhenExists_ReturnsUser()" classname="com.eventflow.backend.service.UserServiceTest" time="0.002"/>
   <testcase name="getUserById_WhenNotExists_ReturnsEmpty()" classname="com.eventflow.backend.service.UserServiceTest" time="0.001"/>

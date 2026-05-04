@@ -1,60 +1,189 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import api from "../api/axios";
 
 const VENUE_CATEGORIES = [
     "CLUB", "BAR", "CONCERT_HALL", "THEATRE", "OUTDOOR", "GALLERY", "STADIUM", "OTHER"
 ];
 
-function fieldStyle(hasError) {
-    return {
-        width: "100%",
-        padding: "12px 16px",
-        borderRadius: "10px",
-        border: hasError ? "1px solid #ef4444" : "1px solid #2a2a2a",
-        background: "#111",
-        color: "white",
-        fontSize: "14px",
-        outline: "none",
-        boxSizing: "border-box",
-        transition: "border-color 0.2s"
-    };
-}
+const styles = `
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-function Label({ children }) {
-    return (
-        <label style={{
-            display: "block", fontSize: "12px", fontWeight: "600",
-            color: "#9ca3af", marginBottom: "6px",
-            letterSpacing: "0.5px", textTransform: "uppercase"
-        }}>
-            {children}
-        </label>
-    );
-}
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.96) translateY(8px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .vd * { box-sizing: border-box; margin: 0; padding: 0; }
+    .vd { min-height: 100vh; background: #0d0d0d; color: #f0ede8; font-family: 'DM Sans', sans-serif; }
+
+    .vd-hero { position: relative; height: 420px; overflow: hidden; }
+    .vd-hero-img { width: 100%; height: 100%; object-fit: cover; display: block; animation: fadeIn 0.6s ease; filter: brightness(0.75); }
+    .vd-hero-gradient { position: absolute; inset: 0; background: linear-gradient(to top, #0d0d0d 0%, rgba(13,13,13,0.5) 50%, transparent 100%); }
+    .vd-back-btn {
+        position: absolute; top: 28px; left: 28px;
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(13,13,13,0.55); border: 1px solid rgba(255,255,255,0.12);
+        color: #f0ede8; padding: 9px 18px; border-radius: 100px; cursor: pointer;
+        font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.3px;
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .vd-back-btn:hover { background: rgba(108,99,255,0.25); border-color: rgba(108,99,255,0.5); }
+
+    .vd-content { max-width: 820px; margin: 0 auto; padding: 0 32px 100px; animation: fadeUp 0.5s ease 0.1s both; }
+
+    .vd-cat-tag {
+        display: inline-block; margin-bottom: 20px;
+        padding: 5px 14px; border-radius: 100px;
+        background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.4);
+        color: #9d97ff; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+    }
+
+    .vd-title-row {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        gap: 20px; margin-bottom: 36px; flex-wrap: wrap;
+    }
+    .vd-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(32px, 5vw, 52px); font-weight: 400; line-height: 1.1;
+        color: #f5f2ed; letter-spacing: -0.5px; flex: 1;
+    }
+    .vd-admin-btns { display: flex; gap: 10px; flex-shrink: 0; margin-top: 6px; }
+    .vd-edit-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 10px 20px; border-radius: 100px;
+        border: 1px solid #2a2a2a; background: #161616;
+        color: #888; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .vd-edit-btn:hover { border-color: #444; color: #f0ede8; background: #1e1e1e; }
+    .vd-delete-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 10px 20px; border-radius: 100px;
+        border: 1px solid rgba(239,68,68,0.25); background: transparent;
+        color: #ef4444; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    }
+    .vd-delete-btn:hover { border-color: #ef4444; background: rgba(239,68,68,0.08); }
+
+    .vd-divider { height: 1px; background: linear-gradient(to right, #2a2a2a, transparent); margin-bottom: 32px; }
+
+    .vd-info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 40px; }
+    .vd-info-card { background: #161616; border: 1px solid #222; border-radius: 14px; padding: 18px 20px; transition: border-color 0.2s; }
+    .vd-info-card:hover { border-color: #333; }
+    .vd-info-label { color: #666; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .vd-info-value { font-size: 15px; font-weight: 500; color: #e8e4de; line-height: 1.4; }
+    .vd-info-link { color: #9d97ff; font-size: 15px; font-weight: 500; text-decoration: none; }
+    .vd-info-link:hover { text-decoration: underline; }
+
+    .vd-about { margin-bottom: 48px; }
+    .vd-section-heading { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: #f5f2ed; margin-bottom: 14px; letter-spacing: -0.2px; }
+    .vd-desc { color: #9e9b96; line-height: 1.8; font-size: 15.5px; font-weight: 300; }
+
+    /* Edit form */
+    .vd-edit-form { background: #141414; border: 1px solid #222; border-radius: 18px; padding: 28px; margin-bottom: 32px; }
+    .vd-edit-heading { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: #f5f2ed; margin-bottom: 24px; }
+    .field-group { margin-bottom: 20px; }
+    .field-label { display: block; font-size: 10px; font-weight: 600; color: #555; margin-bottom: 7px; letter-spacing: 1px; text-transform: uppercase; }
+    .field-input, .field-textarea, .field-select {
+        width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #222;
+        background: #0d0d0d; color: #f0ede8; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s;
+    }
+    .field-input::placeholder, .field-textarea::placeholder { color: #333; }
+    .field-input:focus, .field-textarea:focus, .field-select:focus { border-color: rgba(108,99,255,0.5); }
+    .field-textarea { resize: vertical; min-height: 90px; }
+    .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .save-error { color: #ef4444; font-size: 13px; margin-bottom: 16px; }
+    .vd-form-actions { display: flex; gap: 12px; }
+    .vd-cancel-btn {
+        flex: 1; padding: 13px; border-radius: 12px; border: 1px solid #2a2a2a;
+        background: transparent; color: #888; font-family: 'DM Sans', sans-serif;
+        font-size: 14px; cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    }
+    .vd-cancel-btn:hover { border-color: #444; color: #f0ede8; }
+    .vd-save-btn {
+        flex: 2; padding: 13px; border-radius: 12px; border: none;
+        background: linear-gradient(135deg, #6c63ff 0%, #8b84ff 100%);
+        color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+        cursor: pointer; transition: opacity 0.2s; box-shadow: 0 4px 20px rgba(108,99,255,0.25);
+    }
+    .vd-save-btn:hover { opacity: 0.9; }
+    .vd-save-btn:disabled { background: #1e1e1e; color: #444; cursor: not-allowed; box-shadow: none; }
+
+    /* Delete modal */
+    .modal-backdrop {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000;
+        display: flex; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 0.2s ease;
+    }
+    .del-modal {
+        background: #141414; border-radius: 22px; border: 1px solid #2a1a1a;
+        padding: 40px 36px; width: 100%; max-width: 400px; text-align: center;
+        animation: modalIn 0.25s ease;
+    }
+    .del-modal-icon { font-size: 44px; margin-bottom: 16px; }
+    .del-modal-title { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: #f5f2ed; margin-bottom: 12px; }
+    .del-modal-sub { color: #555; font-size: 14px; font-weight: 300; line-height: 1.6; margin-bottom: 28px; }
+    .del-modal-sub strong { color: #f0ede8; font-weight: 500; }
+    .del-modal-actions { display: flex; gap: 12px; }
+    .del-cancel-btn {
+        flex: 1; padding: 13px; border-radius: 12px; border: 1px solid #2a2a2a;
+        background: transparent; color: #888; font-family: 'DM Sans', sans-serif;
+        font-size: 14px; cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    }
+    .del-cancel-btn:hover { border-color: #444; color: #f0ede8; }
+    .del-confirm-btn {
+        flex: 1; padding: 13px; border-radius: 12px; border: none;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+        cursor: pointer; transition: opacity 0.2s;
+    }
+    .del-confirm-btn:hover { opacity: 0.9; }
+    .del-confirm-btn:disabled { background: #1e1e1e; color: #444; cursor: not-allowed; }
+
+    .state-screen { min-height: 100vh; background: #0d0d0d; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; }
+    .state-muted { color: #555; font-size: 15px; }
+    .state-error { color: #ef4444; font-size: 15px; }
+
+    @media (max-width: 600px) {
+        .vd-hero { height: 300px; }
+        .vd-content { padding: 0 20px 80px; }
+        .vd-info-grid { grid-template-columns: 1fr 1fr; }
+        .field-row-2 { grid-template-columns: 1fr; }
+        .vd-title-row { flex-direction: column; }
+        .vd-admin-btns { width: 100%; }
+    }
+`;
 
 export default function VenueDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { isAdmin } = useAuth();
 
-    const [venue, setVenue] = useState(null);
+    const [venue, setVenue]   = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError]   = useState(null);
 
-    const [editing, setEditing] = useState(false);
-    const [form, setForm] = useState({});
-    const [saving, setSaving] = useState(false);
+    const [editing, setEditing]   = useState(false);
+    const [form, setForm]         = useState({});
+    const [saving, setSaving]     = useState(false);
     const [saveError, setSaveError] = useState(null);
 
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [deleting, setDeleting] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [deleting, setDeleting]     = useState(false);
 
     useEffect(() => {
         api.get(`/api/venues/${id}`)
-            .then(res => {
-                setVenue(res.data);
-                setForm(res.data);
-            })
+            .then(res => { setVenue(res.data); setForm(res.data); })
             .catch(err => setError(err.response?.data?.message || "Venue not found"))
             .finally(() => setLoading(false));
     }, [id]);
@@ -66,14 +195,10 @@ export default function VenueDetailPage() {
         setSaveError(null);
         try {
             const res = await api.put(`/api/venues/${id}`, {
-                name: form.name,
-                description: form.description || null,
-                address: form.address,
-                latitude: parseFloat(form.latitude),
-                longitude: parseFloat(form.longitude),
-                imageUrl: form.imageUrl || null,
-                website: form.website || null,
-                category: form.category
+                name: form.name, description: form.description || null,
+                address: form.address, latitude: parseFloat(form.latitude),
+                longitude: parseFloat(form.longitude), imageUrl: form.imageUrl || null,
+                website: form.website || null, category: form.category
             });
             setVenue(res.data);
             setEditing(false);
@@ -92,307 +217,154 @@ export default function VenueDetailPage() {
         } catch (err) {
             console.error("Delete failed:", err);
             setDeleting(false);
-            setShowDeleteConfirm(false);
+            setShowDelete(false);
         }
     };
 
-    const handleCancelEdit = () => {
-        setForm(venue);
-        setEditing(false);
-        setSaveError(null);
-    };
-
     if (loading) return (
-        <div style={{ minHeight: "100vh", background: "#0f0f0f", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <p style={{ color: "#9ca3af" }}>Loading venue...</p>
-        </div>
+        <><style>{styles}</style>
+            <div className="state-screen"><p className="state-muted">Loading venue…</p></div></>
+    );
+    if (error) return (
+        <><style>{styles}</style>
+            <div className="state-screen"><p className="state-error">{error}</p></div></>
     );
 
-    if (error) return (
-        <div style={{ minHeight: "100vh", background: "#0f0f0f", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <p style={{ color: "#ef4444" }}>{error}</p>
-        </div>
-    );
+    const infoItems = [
+        { icon: "📍", label: "Address",     value: venue.address },
+        { icon: "🗺️", label: "Coordinates", value: `${venue.latitude}, ${venue.longitude}` },
+        venue.website && { icon: "🌐", label: "Website", value: venue.website, isLink: true },
+    ].filter(Boolean);
 
     return (
-        <div style={{
-            minHeight: "100vh",
-            background: "linear-gradient(to bottom, #0f0f0f, #151515)",
-            color: "white",
-            fontFamily: "sans-serif"
-        }}>
+        <>
+            <style>{styles}</style>
+            <div className="vd">
 
-            {/* Delete Confirm Modal */}
-            {showDeleteConfirm && (
-                <div
-                    onClick={() => setShowDeleteConfirm(false)}
-                    style={{
-                        position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)",
-                        zIndex: 1000, display: "flex", alignItems: "center",
-                        justifyContent: "center", padding: "24px"
-                    }}
-                >
-                    <div
-                        onClick={e => e.stopPropagation()}
-                        style={{
-                            background: "#1a1a1a", borderRadius: "20px",
-                            border: "1px solid #3a1a1a", padding: "32px",
-                            width: "100%", maxWidth: "400px", textAlign: "center"
-                        }}
-                    >
-                        <div style={{ fontSize: "40px", marginBottom: "16px" }}>🗑️</div>
-                        <h2 style={{ margin: "0 0 12px", fontSize: "20px" }}>Delete Venue?</h2>
-                        <p style={{ color: "#9ca3af", marginBottom: "28px", fontSize: "14px" }}>
-                            This will permanently delete <strong style={{ color: "white" }}>{venue.name}</strong>. This action cannot be undone.
-                        </p>
-                        <div style={{ display: "flex", gap: "12px" }}>
-                            <button
-                                onClick={() => setShowDeleteConfirm(false)}
-                                style={{
-                                    flex: 1, padding: "12px", borderRadius: "10px",
-                                    border: "1px solid #2a2a2a", background: "transparent",
-                                    color: "white", cursor: "pointer", fontSize: "14px"
-                                }}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDelete}
-                                disabled={deleting}
-                                style={{
-                                    flex: 1, padding: "12px", borderRadius: "10px",
-                                    border: "none",
-                                    background: deleting ? "#3a3a3a" : "linear-gradient(135deg, #ef4444, #dc2626)",
-                                    color: deleting ? "#9ca3af" : "white",
-                                    cursor: deleting ? "not-allowed" : "pointer",
-                                    fontSize: "14px", fontWeight: "600"
-                                }}
-                            >
-                                {deleting ? "Deleting..." : "Yes, Delete"}
-                            </button>
+                {/* Delete confirm modal */}
+                {showDelete && (
+                    <div className="modal-backdrop" onClick={() => setShowDelete(false)}>
+                        <div className="del-modal" onClick={e => e.stopPropagation()}>
+                            <div className="del-modal-icon">🗑️</div>
+                            <h2 className="del-modal-title">Delete Venue?</h2>
+                            <p className="del-modal-sub">
+                                This will permanently delete <strong>{venue.name}</strong>. This cannot be undone.
+                            </p>
+                            <div className="del-modal-actions">
+                                <button className="del-cancel-btn" onClick={() => setShowDelete(false)}>Cancel</button>
+                                <button className="del-confirm-btn" onClick={handleDelete} disabled={deleting}>
+                                    {deleting ? "Deleting…" : "Yes, Delete"}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-
-            {/* Hero Image */}
-            <div style={{ position: "relative", height: "380px", overflow: "hidden" }}>
-                <img
-                    src={venue.imageUrl || `https://picsum.photos/1200/400?${venue.id}`}
-                    alt={venue.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-                <div style={{
-                    position: "absolute", inset: 0,
-                    background: "linear-gradient(to top, #0f0f0f 20%, transparent 100%)"
-                }} />
-                <button
-                    onClick={() => navigate("/venues")}
-                    style={{
-                        position: "absolute", top: "24px", left: "24px",
-                        background: "rgba(0,0,0,0.5)", border: "1px solid #333",
-                        color: "white", padding: "8px 16px", borderRadius: "8px",
-                        cursor: "pointer", fontSize: "14px", backdropFilter: "blur(8px)"
-                    }}
-                >
-                    ← Back
-                </button>
-            </div>
-
-            {/* Content */}
-            <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 32px 80px" }}>
-
-                {/* Category badge */}
-                {venue.category && (
-                    <span style={{
-                        display: "inline-block", marginBottom: "16px",
-                        padding: "4px 14px", borderRadius: "20px",
-                        background: "rgba(108,99,255,0.15)", border: "1px solid #6c63ff",
-                        color: "#6c63ff", fontSize: "12px", fontWeight: "600"
-                    }}>
-                        {venue.category.replace("_", " ")}
-                    </span>
                 )}
 
-                {/* Title row + action buttons */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px", flexWrap: "wrap", gap: "12px" }}>
-                    <h1 style={{ fontSize: "38px", fontWeight: "700", margin: 0 }}>
-                        {venue.name}
-                    </h1>
+                <div className="vd-hero">
+                    <img className="vd-hero-img" src={venue.imageUrl || `https://picsum.photos/1200/420?${venue.id}`} alt={venue.name} />
+                    <div className="vd-hero-gradient" />
+                    <button className="vd-back-btn" onClick={() => navigate("/venues")}>← Back</button>
+                </div>
+
+                <div className="vd-content">
+                    {venue.category && (
+                        <span className="vd-cat-tag">{venue.category.replace("_", " ")}</span>
+                    )}
+
+                    <div className="vd-title-row">
+                        <h1 className="vd-title">{venue.name}</h1>
+                        {isAdmin && !editing && (
+                            <div className="vd-admin-btns">
+                                <button className="vd-edit-btn" onClick={() => setEditing(true)}>✏️ Edit</button>
+                                <button className="vd-delete-btn" onClick={() => setShowDelete(true)}>🗑️ Delete</button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="vd-divider" />
+
                     {!editing && (
-                        <div style={{ display: "flex", gap: "10px" }}>
-                            <button
-                                onClick={() => setEditing(true)}
-                                style={{
-                                    padding: "10px 20px", borderRadius: "10px",
-                                    border: "1px solid #6c63ff", background: "transparent",
-                                    color: "#6c63ff", cursor: "pointer",
-                                    fontSize: "14px", fontWeight: "600"
-                                }}
-                            >
-                                ✏️ Edit
-                            </button>
-                            <button
-                                onClick={() => setShowDeleteConfirm(true)}
-                                style={{
-                                    padding: "10px 20px", borderRadius: "10px",
-                                    border: "1px solid #ef4444", background: "transparent",
-                                    color: "#ef4444", cursor: "pointer",
-                                    fontSize: "14px", fontWeight: "600"
-                                }}
-                            >
-                                🗑️ Delete
-                            </button>
+                        <>
+                            <div className="vd-info-grid">
+                                {infoItems.map(({ icon, label, value, isLink }) => (
+                                    <div key={label} className="vd-info-card">
+                                        <p className="vd-info-label"><span>{icon}</span>{label}</p>
+                                        {isLink
+                                            ? <a href={value} target="_blank" rel="noreferrer" className="vd-info-link">{value.replace(/^https?:\/\//, "")}</a>
+                                            : <p className="vd-info-value">{value}</p>
+                                        }
+                                    </div>
+                                ))}
+                            </div>
+
+                            {venue.description && (
+                                <div className="vd-about">
+                                    <h2 className="vd-section-heading">About</h2>
+                                    <p className="vd-desc">{venue.description}</p>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {editing && (
+                        <div className="vd-edit-form">
+                            <h2 className="vd-edit-heading">Edit Venue</h2>
+
+                            <div className="field-group">
+                                <label className="field-label">Venue Name *</label>
+                                <input className="field-input" value={form.name || ""} onChange={e => set("name", e.target.value)} />
+                            </div>
+
+                            <div className="field-group">
+                                <label className="field-label">Category *</label>
+                                <select className="field-select" value={form.category || ""} onChange={e => set("category", e.target.value)} style={{ colorScheme: "dark" }}>
+                                    {VENUE_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat.replace("_", " ")}</option>)}
+                                </select>
+                            </div>
+
+                            <div className="field-group">
+                                <label className="field-label">Address *</label>
+                                <input className="field-input" value={form.address || ""} onChange={e => set("address", e.target.value)} />
+                            </div>
+
+                            <div className="field-row-2">
+                                <div>
+                                    <label className="field-label">Latitude *</label>
+                                    <input type="number" step="any" className="field-input" value={form.latitude || ""} onChange={e => set("latitude", e.target.value)} />
+                                </div>
+                                <div>
+                                    <label className="field-label">Longitude *</label>
+                                    <input type="number" step="any" className="field-input" value={form.longitude || ""} onChange={e => set("longitude", e.target.value)} />
+                                </div>
+                            </div>
+
+                            <div className="field-group">
+                                <label className="field-label">Website</label>
+                                <input className="field-input" value={form.website || ""} onChange={e => set("website", e.target.value)} />
+                            </div>
+
+                            <div className="field-group">
+                                <label className="field-label">Image URL</label>
+                                <input className="field-input" value={form.imageUrl || ""} onChange={e => set("imageUrl", e.target.value)} />
+                            </div>
+
+                            <div className="field-group">
+                                <label className="field-label">Description</label>
+                                <textarea className="field-textarea" value={form.description || ""} onChange={e => set("description", e.target.value)} rows={4} />
+                            </div>
+
+                            {saveError && <p className="save-error">{saveError}</p>}
+
+                            <div className="vd-form-actions">
+                                <button className="vd-cancel-btn" onClick={() => { setForm(venue); setEditing(false); setSaveError(null); }}>Cancel</button>
+                                <button className="vd-save-btn" onClick={handleSave} disabled={saving}>
+                                    {saving ? "Saving…" : "Save Changes"}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
-
-                {/* VIEW MODE */}
-                {!editing && (
-                    <>
-                        <div style={{
-                            display: "grid", gridTemplateColumns: "1fr 1fr",
-                            gap: "16px", marginBottom: "32px"
-                        }}>
-                            {[
-                                { icon: "📍", label: "Address", value: venue.address },
-                                { icon: "🗺️", label: "Coordinates", value: `${venue.latitude}, ${venue.longitude}` },
-                                venue.website && { icon: "🌐", label: "Website", value: venue.website, isLink: true },
-                            ].filter(Boolean).map(({ icon, label, value, isLink }) => (
-                                <div key={label} style={{
-                                    background: "#1a1a1a", borderRadius: "12px",
-                                    border: "1px solid #2a2a2a", padding: "16px"
-                                }}>
-                                    <p style={{ color: "#9ca3af", fontSize: "12px", margin: "0 0 4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                        {icon} {label}
-                                    </p>
-                                    {isLink ? (
-                                        <a href={value} target="_blank" rel="noreferrer"
-                                           style={{ color: "#6c63ff", fontWeight: "600", fontSize: "14px" }}>
-                                            {value}
-                                        </a>
-                                    ) : (
-                                        <p style={{ margin: 0, fontWeight: "600", fontSize: "15px" }}>{value}</p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        {venue.description && (
-                            <div style={{ marginBottom: "32px" }}>
-                                <h2 style={{ fontSize: "20px", fontWeight: "600", marginBottom: "12px" }}>About</h2>
-                                <p style={{ color: "#d1d5db", lineHeight: "1.7", margin: 0 }}>
-                                    {venue.description}
-                                </p>
-                            </div>
-                        )}
-                    </>
-                )}
-
-                {/* EDIT MODE */}
-                {editing && (
-                    <div style={{
-                        background: "#1a1a1a", borderRadius: "16px",
-                        border: "1px solid #2a2a2a", padding: "28px",
-                        marginBottom: "32px"
-                    }}>
-                        <h2 style={{ margin: "0 0 24px", fontSize: "18px" }}>Edit Venue</h2>
-
-                        <div style={{ marginBottom: "20px" }}>
-                            <Label>Venue Name *</Label>
-                            <input value={form.name || ""} onChange={e => set("name", e.target.value)}
-                                   style={fieldStyle(false)}
-                                   onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                   onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                        </div>
-
-                        <div style={{ marginBottom: "20px" }}>
-                            <Label>Category *</Label>
-                            <select value={form.category || ""} onChange={e => set("category", e.target.value)}
-                                    style={{ ...fieldStyle(false), colorScheme: "dark" }}>
-                                {VENUE_CATEGORIES.map(cat => (
-                                    <option key={cat} value={cat}>{cat.replace("_", " ")}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div style={{ marginBottom: "20px" }}>
-                            <Label>Address *</Label>
-                            <input value={form.address || ""} onChange={e => set("address", e.target.value)}
-                                   style={fieldStyle(false)}
-                                   onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                   onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
-                            <div>
-                                <Label>Latitude *</Label>
-                                <input type="number" step="any" value={form.latitude || ""}
-                                       onChange={e => set("latitude", e.target.value)}
-                                       style={fieldStyle(false)}
-                                       onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                       onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                            </div>
-                            <div>
-                                <Label>Longitude *</Label>
-                                <input type="number" step="any" value={form.longitude || ""}
-                                       onChange={e => set("longitude", e.target.value)}
-                                       style={fieldStyle(false)}
-                                       onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                       onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                            </div>
-                        </div>
-
-                        <div style={{ marginBottom: "20px" }}>
-                            <Label>Website</Label>
-                            <input value={form.website || ""} onChange={e => set("website", e.target.value)}
-                                   style={fieldStyle(false)}
-                                   onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                   onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                        </div>
-
-                        <div style={{ marginBottom: "20px" }}>
-                            <Label>Image URL</Label>
-                            <input value={form.imageUrl || ""} onChange={e => set("imageUrl", e.target.value)}
-                                   style={fieldStyle(false)}
-                                   onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                   onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                        </div>
-
-                        <div style={{ marginBottom: "24px" }}>
-                            <Label>Description</Label>
-                            <textarea value={form.description || ""} onChange={e => set("description", e.target.value)}
-                                      rows={4}
-                                      style={{ ...fieldStyle(false), resize: "vertical", fontFamily: "sans-serif" }}
-                                      onFocus={e => e.target.style.borderColor = "#6c63ff"}
-                                      onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
-                        </div>
-
-                        {saveError && (
-                            <p style={{ color: "#ef4444", fontSize: "13px", marginBottom: "16px" }}>{saveError}</p>
-                        )}
-
-                        <div style={{ display: "flex", gap: "12px" }}>
-                            <button onClick={handleCancelEdit} style={{
-                                flex: 1, padding: "12px", borderRadius: "10px",
-                                border: "1px solid #2a2a2a", background: "transparent",
-                                color: "white", cursor: "pointer", fontSize: "14px"
-                            }}>
-                                Cancel
-                            </button>
-                            <button onClick={handleSave} disabled={saving} style={{
-                                flex: 2, padding: "12px", borderRadius: "10px", border: "none",
-                                background: saving ? "#3a3a3a" : "linear-gradient(135deg, #6c63ff, #5a52e0)",
-                                color: saving ? "#9ca3af" : "white",
-                                cursor: saving ? "not-allowed" : "pointer",
-                                fontSize: "14px", fontWeight: "600"
-                            }}>
-                                {saving ? "Saving..." : "Save Changes"}
-                            </button>
-                        </div>
-                    </div>
-                )}
             </div>
-        </div>
+        </>
     );
 }
