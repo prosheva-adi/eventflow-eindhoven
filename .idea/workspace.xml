@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="fixing venue design">
-      <change afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="adding sonarqube to pipeline">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sonar-project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +220,7 @@
       <workItem from="1777844802872" duration="6009000" />
       <workItem from="1777927530067" duration="5217000" />
       <workItem from="1777986244011" duration="3000" />
-      <workItem from="1777998933277" duration="2351000" />
+      <workItem from="1777998933277" duration="2925000" />
     </task>
     <task id="LOCAL-00001" summary="Add database migration and PostgreSQL connection">
       <option name="closed" value="true" />
@@ -386,7 +390,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777932188552</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="adding sonarqube to pipeline">
+      <option name="closed" value="true" />
+      <created>1778001426685</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1778001426685</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -414,6 +426,7 @@
     <MESSAGE value="added liked user" />
     <MESSAGE value="fixing tests for event controller" />
     <MESSAGE value="fixing venue design" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing venue design" />
+    <MESSAGE value="adding sonarqube to pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding sonarqube to pipeline" />
   </component>
 </project>
