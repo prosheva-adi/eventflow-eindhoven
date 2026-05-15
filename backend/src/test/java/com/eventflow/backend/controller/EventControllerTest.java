@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -101,5 +102,60 @@ class EventControllerTest {
 
         mockMvc.perform(delete("/api/events/" + testId))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void updateEvent_WhenExists_Returns200() throws Exception {
+        when(eventService.getEventById(testId)).thenReturn(Optional.of(testEvent));
+        when(eventService.saveEvent(any(Event.class))).thenReturn(testEvent);
+
+        mockMvc.perform(put("/api/events/" + testId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testEvent)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Test Event"));
+    }
+
+    @Test
+    void updateEvent_WhenNotExists_Returns404() throws Exception {
+        when(eventService.getEventById(testId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/events/" + testId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testEvent)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void likeEvent_Returns204() throws Exception {
+        doNothing().when(likedEventService).likeEvent(any(), any());
+
+        mockMvc.perform(post("/api/events/" + testId + "/like"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void unlikeEvent_Returns204() throws Exception {
+        doNothing().when(likedEventService).unlikeEvent(any(), any());
+
+        mockMvc.perform(delete("/api/events/" + testId + "/like"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void isLiked_ReturnsBoolean() throws Exception {
+        when(likedEventService.isLiked(any(), eq(testId))).thenReturn(true);
+
+        mockMvc.perform(get("/api/events/" + testId + "/like"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.liked").value(true));
+    }
+
+    @Test
+    void getLikedEvents_Returns200() throws Exception {
+        when(likedEventService.getLikedEvents(any())).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/events/liked"))
+                .andExpect(status().isOk());
     }
 }

@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="added AuthServiceTest">
-      <change afterPath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/service/LikedEventServiceTest.java" afterDir="false" />
+    <list default="true" id="b17b8fba-7d5b-4657-9fd0-8148aaf6850b" name="Changes" comment="more tests on services">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eventflow/backend/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/controller/AuthControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
@@ -14,13 +15,15 @@
       <change beforePath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/build/jacoco/test.exec" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/jacoco/test.exec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/classes/com.eventflow.backend.service.AuthServiceTest.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.service.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.service.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/TEST-com.eventflow.backend.service.AuthServiceTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build/reports/tests/test/packages/com.eventflow.backend.service.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin.idx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/binary/output.bin.idx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/test-results/test/binary/results.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build/tmp/compileTestJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/service/UserServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/controller/EventControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/controller/EventControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/controller/VenueControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/eventflow/backend/controller/VenueControllerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,8 +103,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.AuthControllerTest.executor": "Run",
     "Gradle.AuthServiceTest.executor": "Run",
     "Gradle.Build backend.executor": "Run",
+    "Gradle.EventControllerTest.executor": "Run",
     "Gradle.LikedEventServiceTest.executor": "Run",
     "Gradle.Tests in 'backend.test'.executor": "Run",
     "Gradle.Tests in 'com.eventflow.backend.controller'.executor": "Run",
@@ -133,8 +138,8 @@
       <recent name="C:\Users\prosh\eventflow-eindhoven\frontend\src\components" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.UserServiceTest">
-    <configuration name="AuthServiceTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.JwtAuthFilterTest">
+    <configuration name="AuthControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
@@ -147,7 +152,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;com.eventflow.backend.service.AuthServiceTest&quot;" />
+            <option value="&quot;com.eventflow.backend.controller.AuthControllerTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -161,7 +166,7 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="LikedEventServiceTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="EventControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
@@ -174,7 +179,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;com.eventflow.backend.service.LikedEventServiceTest&quot;" />
+            <option value="&quot;com.eventflow.backend.controller.EventControllerTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -188,7 +193,7 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'backend.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="JwtAuthFilterTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
@@ -200,6 +205,8 @@
         <option name="taskNames">
           <list>
             <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.eventflow.backend.security.JwtAuthFilterTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -213,7 +220,7 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'com.eventflow.backend.service'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="JwtUtilTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
@@ -226,7 +233,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;com.eventflow.backend.service.*&quot;" />
+            <option value="&quot;com.eventflow.backend.security.JwtUtilTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -276,11 +283,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.JwtAuthFilterTest" />
+        <item itemvalue="Gradle.JwtUtilTest" />
+        <item itemvalue="Gradle.AuthControllerTest" />
+        <item itemvalue="Gradle.EventControllerTest" />
         <item itemvalue="Gradle.UserServiceTest" />
-        <item itemvalue="Gradle.LikedEventServiceTest" />
-        <item itemvalue="Gradle.AuthServiceTest" />
-        <item itemvalue="Gradle.Tests in 'com.eventflow.backend.service'" />
-        <item itemvalue="Gradle.Tests in 'backend.test'" />
       </list>
     </recent_temporary>
   </component>
@@ -514,14 +521,21 @@
       <option name="project" value="LOCAL" />
       <updated>1778883708532</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="more tests on services">
+      <option name="closed" value="true" />
+      <created>1778884235025</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1778884235025</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add database migration and PostgreSQL connection" />
     <MESSAGE value="Remove application.properties from tracking" />
     <MESSAGE value="Add JPA entities" />
     <MESSAGE value="Add repositories" />
@@ -546,6 +560,7 @@
     <MESSAGE value="finished fixiing bugs" />
     <MESSAGE value="Adding SonarQube&#10;&#10;Adding SonarQube" />
     <MESSAGE value="added AuthServiceTest" />
-    <option name="LAST_COMMIT_MESSAGE" value="added AuthServiceTest" />
+    <MESSAGE value="more tests on services" />
+    <option name="LAST_COMMIT_MESSAGE" value="more tests on services" />
   </component>
 </project>

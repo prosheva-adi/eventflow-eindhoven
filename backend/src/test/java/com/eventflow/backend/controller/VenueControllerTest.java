@@ -100,4 +100,26 @@ class VenueControllerTest {
         mockMvc.perform(delete("/api/venues/" + testId))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void updateVenue_WhenExists_Returns200() throws Exception {
+        when(venueService.getVenueById(testId)).thenReturn(Optional.of(testVenue));
+        when(venueService.saveVenue(any(Venue.class))).thenReturn(testVenue);
+
+        mockMvc.perform(put("/api/venues/" + testId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testVenue)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Test Venue"));
+    }
+
+    @Test
+    void updateVenue_WhenNotExists_Returns404() throws Exception {
+        when(venueService.getVenueById(testId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/venues/" + testId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testVenue)))
+                .andExpect(status().isNotFound());
+    }
 }
