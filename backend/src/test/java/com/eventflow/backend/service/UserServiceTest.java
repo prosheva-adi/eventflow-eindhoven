@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -77,5 +79,24 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("testuser", result.getUsername());
         verify(userRepository, times(1)).save(testUser);
+    }
+
+    @Test
+    void loadUserByUsername_WhenExists_ReturnsUserDetails() {
+        when(userRepository.findByEmail("test@test.com")).thenReturn(Optional.of(testUser));
+
+        UserDetails result = userService.loadUserByUsername("test@test.com");
+
+        assertNotNull(result);
+        assertNotNull(result);
+        verify(userRepository, times(1)).findByEmail("test@test.com");
+    }
+
+    @Test
+    void loadUserByUsername_WhenNotExists_ThrowsException() {
+        when(userRepository.findByEmail("unknown@test.com")).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () ->
+                userService.loadUserByUsername("unknown@test.com"));
     }
 }
