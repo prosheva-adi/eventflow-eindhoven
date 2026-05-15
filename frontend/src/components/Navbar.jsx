@@ -1,31 +1,33 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {useAuth} from "../hooks/useAuth.js";
 
 const styles = `
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
     .nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        font-family: 'DM Sans', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    font-family: 'DM Sans', sans-serif;
+    background: rgba(13,13,13,0.8);           /* ← move here */
+    backdrop-filter: blur(20px);              /* ← move here */
+    -webkit-backdrop-filter: blur(20px);      /* ← move here */
+    border-bottom: 1px solid rgba(255,255,255,0.05); /* ← move here too */
     }
 
     /* Frosted glass bar */
     .nav-inner {
-        max-width: 1400px;
-        margin: 0 auto;
-        height: 66px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        background: rgba(13,13,13,0.8);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
     }
+ 
 
     /* ── Logo ── */
     .nav-logo {
@@ -175,15 +177,14 @@ const NAV_LINKS = [
     { label: "Map",    path: "/" },
     { label: "Events", path: "/events" },
     { label: "Saved",  path: "/saved" },
-    { label: "Venues", path: "/venues" },
+    { label: "Venues", path: "/venues", adminOnly: true },
 ];
 
 function Navbar() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    const isLoggedIn = !!localStorage.getItem("token");
+    const { isLoggedIn, isAdmin, user } = useAuth();
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -205,7 +206,7 @@ function Navbar() {
 
                     {/* Links */}
                     <div className="nav-links">
-                        {NAV_LINKS.map(({ label, path }) => (
+                        {NAV_LINKS.filter(link => !link.adminOnly || isAdmin).map(({ label, path }) => (
                             <Link
                                 key={path}
                                 to={path}

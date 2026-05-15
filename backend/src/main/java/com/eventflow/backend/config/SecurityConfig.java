@@ -45,7 +45,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
 
                         // Venues — admin only
-                        .requestMatchers("/api/venues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/venues/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,   "/api/venues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/venues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/venues/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
