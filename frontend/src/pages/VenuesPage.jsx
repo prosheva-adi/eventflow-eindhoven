@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 
@@ -164,6 +164,12 @@ export default function VenuesPage() {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+
+    const navigate = useNavigate();   // ← add this
+
+    useEffect(() => {                  // ← add this block
+        if (!isAdmin) navigate("/");
+    }, [isAdmin]);
 
     useEffect(() => {
         api.get("/api/venues")
