@@ -78,6 +78,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo systemctl stop nginx || true
+            sudo systemctl disable nginx || true
             cd ~/eventflow-eindhoven
             git pull origin main
+            docker-compose down || true
             docker-compose up --build -d
