@@ -65,3 +65,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ backend, frontend ]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/eventflow-eindhoven
+            git pull origin main
+            docker-compose up --build -d
