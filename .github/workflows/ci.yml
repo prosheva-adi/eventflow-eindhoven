@@ -110,6 +110,8 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/eventflow-frontend:latest
+          build-args: |
+            VITE_API_URL=http://145.220.72.88:8080
 
   deploy:
     runs-on: ubuntu-latest
