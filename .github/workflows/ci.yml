@@ -66,10 +66,54 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
 
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
     needs: [ backend, frontend ]
     if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create application.properties
+        run: |
+          mkdir -p backend/src/main/resources
+          cat > backend/src/main/resources/application.properties << EOF
+          spring.datasource.url=${{ secrets.DB_URL }}
+          spring.datasource.username=${{ secrets.DB_USERNAME }}
+          spring.datasource.password=${{ secrets.DB_PASSWORD }}
+          spring.datasource.driver-class-name=org.postgresql.Driver
+          spring.jpa.hibernate.ddl-auto=validate
+          spring.jpa.show-sql=true
+          spring.jpa.open-in-view=false
+          spring.flyway.enabled=true
+          spring.flyway.locations=classpath:db/migration
+          spring.flyway.baseline-on-migrate=true
+          spring.flyway.validate-on-migrate=false
+          logging.level.org.flywaydb=DEBUG
+          jwt.secret=${{ secrets.JWT_SECRET }}
+          jwt.expiration=86400000
+          spring.datasource.hikari.maximum-pool-size=5
+          spring.datasource.hikari.minimum-idle=2
+          EOF
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/eventflow-backend:latest
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/eventflow-frontend:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ build-and-push ]
     steps:
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.0
@@ -89,24 +133,7 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             JWT_EXPIRATION=86400000
             EOF
-            mkdir -p backend/src/main/resources
-            cat > backend/src/main/resources/application.properties << EOF
-            spring.datasource.url=${{ secrets.DB_URL }}
-            spring.datasource.username=${{ secrets.DB_USERNAME }}
-            spring.datasource.password=${{ secrets.DB_PASSWORD }}
-            spring.datasource.driver-class-name=org.postgresql.Driver
-            spring.jpa.hibernate.ddl-auto=validate
-            spring.jpa.show-sql=true
-            spring.jpa.open-in-view=false
-            spring.flyway.enabled=true
-            spring.flyway.locations=classpath:db/migration
-            spring.flyway.baseline-on-migrate=true
-            spring.flyway.validate-on-migrate=false
-            logging.level.org.flywaydb=DEBUG
-            jwt.secret=${{ secrets.JWT_SECRET }}
-            jwt.expiration=86400000
-            spring.datasource.hikari.maximum-pool-size=5
-            spring.datasource.hikari.minimum-idle=2
-            EOF
+            docker pull ${{ secrets.DOCKER_USERNAME }}/eventflow-backend:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/eventflow-frontend:latest
             docker-compose down || true
-            docker-compose --env-file .env up --build -d
+            docker-compose --env-file .env up -d
