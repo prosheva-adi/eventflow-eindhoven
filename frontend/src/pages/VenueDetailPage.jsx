@@ -75,7 +75,20 @@ const styles = `
         cursor: pointer; transition: border-color 0.2s, background 0.2s;
     }
     .vd-delete-btn:hover { border-color: #ef4444; background: rgba(239,68,68,0.08); }
-
+    /* Follow button */
+    .vd-follow-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 10px 20px; border-radius: 100px;
+        border: 1px solid rgba(108,99,255,0.4); background: rgba(108,99,255,0.1);
+        color: #9d97ff; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .vd-follow-btn:hover { background: rgba(108,99,255,0.2); border-color: rgba(108,99,255,0.7); }
+    .vd-follow-btn.following {
+        background: rgba(108,99,255,0.25); border-color: #6c63ff; color: #fff;
+    }
+    .vd-follow-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
     .vd-divider { height: 1px; background: linear-gradient(to right, #2a2a2a, transparent); margin-bottom: 32px; }
 
     .vd-info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 40px; }
@@ -167,7 +180,7 @@ const styles = `
 export default function VenueDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAdmin } = useAuth();
+    const { isAdmin, isLoggedIn } = useAuth();
 
     const [venue, setVenue]   = useState(null);
     const [loading, setLoading] = useState(true);
@@ -181,12 +194,23 @@ export default function VenueDetailPage() {
     const [showDelete, setShowDelete] = useState(false);
     const [deleting, setDeleting]     = useState(false);
 
+
+    const [following, setFollowing] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false);
+
     useEffect(() => {
         api.get(`/api/venues/${id}`)
             .then(res => { setVenue(res.data); setForm(res.data); })
             .catch(err => setError(err.response?.data?.message || "Venue not found"))
             .finally(() => setLoading(false));
     }, [id]);
+
+    useEffect(() => {
+        if (!isLoggedIn || !id) return;
+        api.get(`/api/venues/${id}/follow`)
+            .then(res => setFollowing(res.data))
+            .catch(err => console.error("Could not check follow status", err));
+    }, [id, isLoggedIn]);
 
     const set = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -218,6 +242,23 @@ export default function VenueDetailPage() {
             console.error("Delete failed:", err);
             setDeleting(false);
             setShowDelete(false);
+        }
+    };
+
+    const handleFollow = async () => {
+        setFollowLoading(true);
+        try {
+            if (following) {
+                await api.delete(`/api/venues/${id}/follow`);
+                setFollowing(false);
+            } else {
+                await api.post(`/api/venues/${id}/follow`);
+                setFollowing(true);
+            }
+        } catch (err) {
+            console.error("Follow failed:", err);
+        } finally {
+            setFollowLoading(false);
         }
     };
 
@@ -273,12 +314,23 @@ export default function VenueDetailPage() {
 
                     <div className="vd-title-row">
                         <h1 className="vd-title">{venue.name}</h1>
-                        {isAdmin && !editing && (
-                            <div className="vd-admin-btns">
-                                <button className="vd-edit-btn" onClick={() => setEditing(true)}>✏️ Edit</button>
-                                <button className="vd-delete-btn" onClick={() => setShowDelete(true)}>🗑️ Delete</button>
-                            </div>
-                        )}
+                        <div className="vd-admin-btns">
+                            {isLoggedIn && !isAdmin && (
+                                <button
+                                    className={`vd-follow-btn ${following ? "following" : ""}`}
+                                    onClick={handleFollow}
+                                    disabled={followLoading}
+                                >
+                                    {following ? "✓ Following" : "+ Follow"}
+                                </button>
+                            )}
+                            {isAdmin && !editing && (
+                                <>
+                                    <button className="vd-edit-btn" onClick={() => setEditing(true)}>✏️ Edit</button>
+                                    <button className="vd-delete-btn" onClick={() => setShowDelete(true)}>🗑️ Delete</button>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     <div className="vd-divider" />

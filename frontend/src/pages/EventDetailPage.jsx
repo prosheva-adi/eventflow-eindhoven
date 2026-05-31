@@ -256,10 +256,10 @@ export default function EventDetailPage() {
     const safeTicketUrl = sanitizeUrl(event.ticketUrl);
 
     const infoItems = [
-        { icon: "📅", label: "Date",      value: formatDate(event.startDate) },
-        { icon: "🕐", label: "Time",      value: formatTime(event.startTime, event.endTime) },
-        { icon: "📍", label: "Venue",     value: event.venue?.name || "TBA" },
-        { icon: "🎟️", label: "Price",     value: event.ticketPrice != null ? (parseFloat(event.ticketPrice) === 0 ? "Free" : `€${event.ticketPrice}`) : "TBA" },
+        { icon: "📅", label: "Date",  value: formatDate(event.startDate) },
+        { icon: "🕐", label: "Time",  value: formatTime(event.startTime, event.endTime) },
+        { icon: "📍", label: "Venue", value: event.venue?.name || "TBA", venueId: event.venue?.id },
+        { icon: "🎟️", label: "Price", value: event.ticketPrice != null ? (parseFloat(event.ticketPrice) === 0 ? "Free" : `€${event.ticketPrice}`) : "TBA" },
         event.organiserName && { icon: "👤", label: "Organiser", value: event.organiserName },
     ].filter(Boolean);
 
@@ -300,10 +300,20 @@ export default function EventDetailPage() {
                     <div className="divider" />
 
                     <div className="info-grid">
-                        {infoItems.map(({ icon, label, value }) => (
+                        {infoItems.map(({ icon, label, value, venueId }) => (
                             <div key={label} className="info-card">
                                 <p className="info-label"><span>{icon}</span>{label}</p>
-                                <p className="info-value">{value}</p>
+                                {venueId ? (
+                                    <p
+                                        className="info-value"
+                                        style={{ color: "#9d97ff", cursor: "pointer" }}
+                                        onClick={() => navigate(`/venues/${venueId}`)}
+                                    >
+                                        {value}
+                                    </p>
+                                ) : (
+                                    <p className="info-value">{value}</p>
+                                )}
                             </div>
                         ))}
                     </div>

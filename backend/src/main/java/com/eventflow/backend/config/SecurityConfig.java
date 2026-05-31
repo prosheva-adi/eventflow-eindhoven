@@ -44,12 +44,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,    "/api/events/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
 
-                        // Venues — admin only
-                        .requestMatchers(HttpMethod.GET,    "/api/venues/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,   "/api/venues/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,    "/api/venues/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/venues/**").hasRole("ADMIN")
+                                // Venue follow — any logged-in user (must come BEFORE the broad venue rules)
+                                .requestMatchers(HttpMethod.GET, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.POST,   "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
 
+// Venues — admin only
+                                .requestMatchers(HttpMethod.GET,    "/api/venues/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,   "/api/venues/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,    "/api/venues/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/venues/**").hasRole("ADMIN")
+
+
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/ws/**").permitAll() // add this
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

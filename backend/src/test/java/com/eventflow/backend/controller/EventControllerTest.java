@@ -1,5 +1,6 @@
 package com.eventflow.backend.controller;
 
+import com.eventflow.backend.dto.EventRequest;
 import com.eventflow.backend.model.Event;
 import com.eventflow.backend.security.JwtAuthFilter;
 import com.eventflow.backend.security.JwtUtil;
@@ -87,11 +88,17 @@ class EventControllerTest {
 
     @Test
     void createEvent_Returns200WithCreatedEvent() throws Exception {
-        when(eventService.saveEvent(any(Event.class))).thenReturn(testEvent);
+        when(eventService.createEvent(any(EventRequest.class))).thenReturn(testEvent);
+
+        EventRequest req = new EventRequest();
+        req.setVenueId(UUID.randomUUID());
+        req.setName("Test Event");
+        req.setStartDate(java.time.LocalDate.of(2026, 6, 1));
+        req.setStartTime(java.time.LocalTime.of(20, 0));
 
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testEvent)))
+                        .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Event"));
     }
