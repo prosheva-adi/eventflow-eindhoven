@@ -205,6 +205,13 @@ export default function VenueDetailPage() {
             .finally(() => setLoading(false));
     }, [id]);
 
+    useEffect(() => {
+        if (!isLoggedIn || !id) return;
+        api.get(`/api/venues/${id}/follow`)
+            .then(res => setFollowing(res.data))
+            .catch(err => console.error("Could not check follow status", err));
+    }, [id, isLoggedIn]);
+
     const set = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
     const handleSave = async () => {

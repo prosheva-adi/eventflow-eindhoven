@@ -1,7 +1,9 @@
 package com.eventflow.backend.controller;
 
 import com.eventflow.backend.model.User;
+import com.eventflow.backend.model.UserFollowedVenueId;
 import com.eventflow.backend.model.Venue;
+import com.eventflow.backend.repository.UserFollowedVenueRepository;
 import com.eventflow.backend.repository.UserRepository;
 import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.VenueService;
@@ -20,6 +22,7 @@ public class VenueController {
     private final VenueService venueService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final UserFollowedVenueRepository followRepository;
 
     @GetMapping
     public List<Venue> getAllVenues() {
@@ -63,6 +66,22 @@ public class VenueController {
                     return ResponseEntity.ok(saved);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/follow")
+    public ResponseEntity<Boolean> isFollowing(@PathVariable UUID id,
+                                               @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserFollowedVenueId followId = new UserFollowedVenueId();
+        followId.setUserId(user.getId());
+        followId.setVenueId(id);
+
+        boolean isFollowing = followRepository.existsById(followId);
+        return ResponseEntity.ok(isFollowing);
     }
 
     @PostMapping("/{id}/follow")

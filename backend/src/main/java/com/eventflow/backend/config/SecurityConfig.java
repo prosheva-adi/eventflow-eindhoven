@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
 
                                 // Venue follow — any logged-in user (must come BEFORE the broad venue rules)
+                                .requestMatchers(HttpMethod.GET, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.POST,   "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
 
