@@ -1,6 +1,9 @@
 package com.eventflow.backend.controller;
 
+import com.eventflow.backend.model.User;
 import com.eventflow.backend.model.Venue;
+import com.eventflow.backend.repository.UserRepository;
+import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.VenueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,8 @@ import java.util.UUID;
 public class VenueController {
 
     private final VenueService venueService;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @GetMapping
     public List<Venue> getAllVenues() {
@@ -30,7 +35,6 @@ public class VenueController {
 
     @PostMapping
     public Venue createVenue(@RequestBody Venue venue) {
-
         return venueService.saveVenue(venue);
     }
 
@@ -55,10 +59,31 @@ public class VenueController {
                     existing.setImageUrl(updatedVenue.getImageUrl());
                     existing.setWebsite(updatedVenue.getWebsite());
                     existing.setCategory(updatedVenue.getCategory());
-
                     Venue saved = venueService.saveVenue(existing);
                     return ResponseEntity.ok(saved);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{id}/follow")
+    public ResponseEntity<Void> followVenue(@PathVariable UUID id,
+                                            @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        venueService.followVenue(user.getId(), id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/follow")
+    public ResponseEntity<Void> unfollowVenue(@PathVariable UUID id,
+                                              @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        venueService.unfollowVenue(user.getId(), id);
+        return ResponseEntity.noContent().build();
     }
 }

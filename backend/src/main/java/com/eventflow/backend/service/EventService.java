@@ -13,6 +13,7 @@ import java.util.UUID;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final NotificationService notificationService;
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
@@ -23,7 +24,9 @@ public class EventService {
     }
 
     public Event saveEvent(Event event) {
-        return eventRepository.save(event);
+        Event saved = eventRepository.save(event);
+        notificationService.notifyFollowers(saved);
+        return saved;
     }
 
     public void deleteEvent(UUID id) {
