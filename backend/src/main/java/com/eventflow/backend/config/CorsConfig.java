@@ -16,9 +16,13 @@ public class CorsConfig {
         config.addAllowedOrigin("http://145.220.72.88");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/ws/**", config); // add this
         return new CorsFilter(source);
     }
 }

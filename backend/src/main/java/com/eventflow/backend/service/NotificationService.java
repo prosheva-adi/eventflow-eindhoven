@@ -22,19 +22,18 @@ public class NotificationService {
     private final JavaMailSender mailSender;
 
     public void notifyFollowers(Event event) {
+        System.out.println("notifyFollowers called for: " + event.getName());
         List<UserFollowedVenue> followers = followRepo.findByVenueId(event.getVenue().getId());
+        System.out.println("Found followers: " + followers.size());
 
         for (UserFollowedVenue follow : followers) {
             User user = follow.getUser();
-
-            // in-app WebSocket notification
+            System.out.println("Sending to email: " + user.getEmail());
             messagingTemplate.convertAndSendToUser(
-                    user.getId().toString(),
+                    user.getEmail(),
                     "/topic/notifications",
                     new EventNotificationDTO(event)
             );
-
-            // email notification
             sendEmailNotification(user, event);
         }
     }

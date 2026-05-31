@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
-import { useAuth } from "../hooks/useAuth"; // 👇 ADDED
+import { useAuth } from "../hooks/useAuth";
 
 const CATEGORIES = [
     "MUSIC", "FOOD", "SPORTS", "ART", "TECH", "COMEDY", "NETWORKING", "OTHER"
 ];
 
 const EMPTY_FORM = {
+    venueId: "",
     name: "",
     startDate: "",
     startTime: "",
@@ -141,13 +142,13 @@ const styles = `
 
     .field-group { margin-bottom: 20px; }
     .field-label { display: block; font-size: 10px; font-weight: 600; color: #555; margin-bottom: 7px; letter-spacing: 1px; text-transform: uppercase; }
-    .field-input, .field-textarea {
+    .field-input, .field-textarea, .field-select {
         width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #222;
         background: #0d0d0d; color: #f0ede8; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s;
     }
     .field-input::placeholder, .field-textarea::placeholder { color: #333; }
-    .field-input:focus, .field-textarea:focus { border-color: rgba(108,99,255,0.5); }
-    .field-input.error, .field-textarea.error { border-color: #ef4444; }
+    .field-input:focus, .field-textarea:focus, .field-select:focus { border-color: rgba(108,99,255,0.5); }
+    .field-input.error, .field-textarea.error, .field-select.error { border-color: #ef4444; }
     .field-textarea { resize: vertical; min-height: 90px; }
     .field-error { color: #ef4444; font-size: 11px; margin-top: 5px; display: block; letter-spacing: 0.2px; }
     .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -183,6 +184,7 @@ function FieldError({ msg }) {
 
 export default function EventsPage() {
     const [events, setEvents] = useState([]);
+    const [venues, setVenues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [showModal, setShowModal] = useState(false);
@@ -191,13 +193,19 @@ export default function EventsPage() {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
 
-    const { isAdmin } = useAuth(); // 👇 ADDED
+    const { isAdmin } = useAuth();
 
     useEffect(() => {
         api.get("/api/events")
             .then(res => setEvents(res.data))
             .catch(err => console.error("Failed to fetch events:", err))
             .finally(() => setLoading(false));
+    }, []);
+
+    useEffect(() => {
+        api.get("/api/venues")
+            .then(res => setVenues(res.data))
+            .catch(err => console.error("Failed to fetch venues:", err));
     }, []);
 
     const set = (key, value) => {
@@ -216,6 +224,7 @@ export default function EventsPage() {
 
     const validate = () => {
         const e = {};
+        if (!form.venueId) e.venueId = "Venue is required";
         if (!form.name.trim()) e.name = "Event name is required";
         if (!form.startDate) e.startDate = "Start date is required";
         if (!form.startTime) e.startTime = "Start time is required";
@@ -230,6 +239,7 @@ export default function EventsPage() {
         setSubmitting(true);
         setSubmitError(null);
         const payload = {
+            venueId: form.venueId,
             name: form.name.trim(),
             startDate: form.startDate,
             startTime: form.startTime,
@@ -281,13 +291,29 @@ export default function EventsPage() {
             <style>{styles}</style>
             <div className="ep">
 
-                {/* ── Modal — gated to admins ── */}
-                {showModal && isAdmin && ( // 👇 ADDED isAdmin
+                {showModal && isAdmin && (
                     <div className="modal-backdrop" onClick={handleClose}>
                         <div className="modal" onClick={e => e.stopPropagation()}>
                             <div className="modal-header">
                                 <h2 className="modal-title">Add Event</h2>
                                 <button className="modal-close" onClick={handleClose} aria-label="Close">✕</button>
+                            </div>
+
+                            {/* Venue dropdown */}
+                            <div className="field-group">
+                                <label className="field-label">Venue *</label>
+                                <select
+                                    className={`field-select${errors.venueId ? " error" : ""}`}
+                                    value={form.venueId}
+                                    onChange={e => set("venueId", e.target.value)}
+                                    style={{ colorScheme: "dark" }}
+                                >
+                                    <option value="">Select a venue…</option>
+                                    {venues.map(v => (
+                                        <option key={v.id} value={v.id}>{v.name}</option>
+                                    ))}
+                                </select>
+                                <FieldError msg={errors.venueId} />
                             </div>
 
                             <div className="field-group">
@@ -368,13 +394,12 @@ export default function EventsPage() {
                     </div>
                 )}
 
-                {/* ── Page header ── */}
+                {/* Page header */}
                 <div className="ep-header">
                     <div>
                         <h1 className="ep-title">Discover Events</h1>
                         <p className="ep-subtitle">The best things happening in Eindhoven</p>
                     </div>
-                    {/* 👇 ADDED — only admins see this */}
                     {isAdmin && (
                         <button className="add-btn" onClick={() => setShowModal(true)}>
                             <span className="add-btn-icon">+</span> Add Event
@@ -382,7 +407,7 @@ export default function EventsPage() {
                     )}
                 </div>
 
-                {/* ── Search ── */}
+                {/* Search */}
                 <div className="ep-search-wrap">
                     <div className="ep-search-wrap-inner">
                         <span className="ep-search-icon">⌕</span>
@@ -390,7 +415,7 @@ export default function EventsPage() {
                     </div>
                 </div>
 
-                {/* ── Grid ── */}
+                {/* Grid */}
                 <div className="ep-grid">
                     {loading && <p className="ep-state">Loading events…</p>}
 
