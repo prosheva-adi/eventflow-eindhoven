@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
+import com.eventflow.backend.dto.UserDTO;
+import com.eventflow.backend.model.enums.Role;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +33,30 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(this::toDTO).toList();
+    }
+
+    public UserDTO updateRole(UUID userId, Role role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setRole(role);
+        return toDTO(userRepository.save(user));
+    }
+
+    private UserDTO toDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+        dto.setCreatedAt(user.getCreatedAt());
+        return dto;
+    }
+
 }
