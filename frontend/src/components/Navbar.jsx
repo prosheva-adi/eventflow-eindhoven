@@ -261,6 +261,7 @@ const NAV_LINKS = [
     { label: "Events", path: "/events" },
     { label: "Saved",  path: "/saved" },
     { label: "Venues", path: "/venues", adminOnly: true },
+    { label: "Users", path: "/admin/users", adminOnly: true },
 ];
 
 function Navbar() {
