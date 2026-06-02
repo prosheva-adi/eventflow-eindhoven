@@ -1,6 +1,8 @@
 package com.eventflow.backend.controller;
 
 import com.eventflow.backend.model.Venue;
+import com.eventflow.backend.repository.UserFollowedVenueRepository;
+import com.eventflow.backend.repository.UserRepository;
 import com.eventflow.backend.security.JwtAuthFilter;
 import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.VenueService;
@@ -13,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import com.eventflow.backend.model.User;
+import com.eventflow.backend.model.enums.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +39,10 @@ class VenueControllerTest {
     @MockitoBean
     private VenueService venueService;
 
+    @MockitoBean
+    private UserRepository userRepository;
+
+    @MockitoBean private UserFollowedVenueRepository followRepository;
 
     @MockitoBean
     private JwtUtil jwtUtil;
@@ -121,5 +129,51 @@ class VenueControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testVenue)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void followVenue_Returns200() throws Exception {
+        User testUser = new User();
+        testUser.setId(UUID.randomUUID());
+        testUser.setEmail("user@test.com");
+        testUser.setRole(Role.USER);
+
+        when(jwtUtil.extractEmail(any())).thenReturn("user@test.com");
+        when(userRepository.findByEmail("user@test.com")).thenReturn(Optional.of(testUser));
+        doNothing().when(venueService).followVenue(any(), any());
+
+        mockMvc.perform(post("/api/venues/" + testId + "/follow")
+                        .header("Authorization", "Bearer test-token"))
+                .andExpect(status().isOk());
+
+        verify(venueService, times(1)).followVenue(testUser.getId(), testId);
+    }
+
+    @Test
+    void unfollowVenue_Returns204() throws Exception {
+        User testUser = new User();
+        testUser.setId(UUID.randomUUID());
+        testUser.setEmail("user@test.com");
+        testUser.setRole(Role.USER);
+
+        when(jwtUtil.extractEmail(any())).thenReturn("user@test.com");
+        when(userRepository.findByEmail("user@test.com")).thenReturn(Optional.of(testUser));
+        doNothing().when(venueService).unfollowVenue(any(), any());
+
+        mockMvc.perform(delete("/api/venues/" + testId + "/follow")
+                        .header("Authorization", "Bearer test-token"))
+                .andExpect(status().isNoContent());
+
+        verify(venueService, times(1)).unfollowVenue(testUser.getId(), testId);
+    }
+
+    @Test
+    void followVenue_WhenUserNotFound_Returns400() throws Exception {
+        when(jwtUtil.extractEmail(any())).thenReturn("unknown@test.com");
+        when(userRepository.findByEmail("unknown@test.com")).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/venues/" + testId + "/follow")
+                        .header("Authorization", "Bearer test-token"))
+                .andExpect(status().isBadRequest()); // 400 not 500
     }
 }

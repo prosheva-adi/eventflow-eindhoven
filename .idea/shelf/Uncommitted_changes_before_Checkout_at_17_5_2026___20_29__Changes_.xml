@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Checkout_at_17_5_2026_г__20_29_[Changes]" date="1779042568665" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_17_5_2026_г__20_29_[Changes]/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 17.5.2026 г. 20:29 [Changes]" />
-  <binary>
-    <option name="BEFORE_PATH" value="backend/.gradle/9.0.0/fileHashes/fileHashes.lock" />
-    <option name="AFTER_PATH" value="backend/.gradle/9.0.0/fileHashes/fileHashes.lock" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_17_5_2026_г__20_29_[Changes]/fileHashes.lock" />
-  </binary>
-</changelist>

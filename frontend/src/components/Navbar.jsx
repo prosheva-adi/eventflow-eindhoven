@@ -1,5 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {useAuth} from "../hooks/useAuth.js";
+import { useAuth } from "../hooks/useAuth.js";
+import { useNotifications } from "../hooks/useNotifications.js";
+import { useState } from "react";
 
 const styles = `
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
@@ -11,13 +13,12 @@ const styles = `
     right: 0;
     z-index: 1000;
     font-family: 'DM Sans', sans-serif;
-    background: rgba(13,13,13,0.8);           /* ← move here */
-    backdrop-filter: blur(20px);              /* ← move here */
-    -webkit-backdrop-filter: blur(20px);      /* ← move here */
-    border-bottom: 1px solid rgba(255,255,255,0.05); /* ← move here too */
+    background: rgba(13,13,13,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* Frosted glass bar */
     .nav-inner {
     max-width: 1400px;
     margin: 0 auto;
@@ -27,9 +28,7 @@ const styles = `
     justify-content: space-between;
     padding: 0 40px;
     }
- 
 
-    /* ── Logo ── */
     .nav-logo {
         display: flex;
         align-items: center;
@@ -61,7 +60,6 @@ const styles = `
         color: #9d97ff;
     }
 
-    /* ── Nav links ── */
     .nav-links {
         display: flex;
         align-items: center;
@@ -99,7 +97,6 @@ const styles = `
         box-shadow: 0 0 6px rgba(108,99,255,0.6);
     }
 
-    /* ── Auth area ── */
     .nav-auth {
         display: flex;
         align-items: center;
@@ -165,11 +162,97 @@ const styles = `
         box-shadow: 0 4px 20px rgba(108,99,255,0.45);
     }
 
+    /* ── Notifications ── */
+    .nav-bell {
+        position: relative;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: #555;
+        padding: 6px;
+        border-radius: 8px;
+        transition: color 0.2s, background 0.2s;
+    }
+    .nav-bell:hover {
+        color: #999;
+        background: rgba(255,255,255,0.04);
+    }
+    .nav-bell-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #6c63ff;
+        box-shadow: 0 0 6px rgba(108,99,255,0.6);
+    }
+    .nav-notifications-dropdown {
+        position: absolute;
+        top: 54px;
+        right: 40px;
+        width: 320px;
+        background: #111;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        z-index: 999;
+        overflow: hidden;
+    }
+    .nav-notifications-header {
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #888;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .nav-notifications-clear {
+        background: none;
+        border: none;
+        color: #6c63ff;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+    }
+    .nav-notifications-clear:hover { opacity: 0.8; }
+    .nav-notification-item {
+        padding: 14px 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        transition: background 0.2s;
+    }
+    .nav-notification-item:hover { background: rgba(255,255,255,0.03); }
+    .nav-notification-venue {
+        font-size: 13px;
+        font-weight: 600;
+        color: #9d97ff;
+        margin-bottom: 3px;
+    }
+    .nav-notification-name {
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 3px;
+    }
+    .nav-notification-date {
+        font-size: 11px;
+        color: #444;
+    }
+    .nav-notifications-empty {
+        padding: 24px 18px;
+        font-size: 13px;
+        color: #444;
+        text-align: center;
+    }
+
     @media (max-width: 700px) {
         .nav-inner { padding: 0 20px; }
         .nav-links { gap: 0; }
         .nav-link { padding: 7px 10px; font-size: 13px; }
         .nav-greeting { display: none; }
+        .nav-notifications-dropdown { right: 10px; width: 290px; }
     }
 `;
 
@@ -183,8 +266,9 @@ const NAV_LINKS = [
 function Navbar() {
     const location = useLocation();
     const navigate = useNavigate();
-
     const { isLoggedIn, isAdmin, user } = useAuth();
+    const { notifications, clearNotifications } = useNotifications();
+    const [showNotifications, setShowNotifications] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -226,6 +310,18 @@ function Navbar() {
                                         Hi, <strong>{user.username}</strong>
                                     </span>
                                 )}
+
+                                {/* Bell */}
+                                <button
+                                    className="nav-bell"
+                                    onClick={() => setShowNotifications(p => !p)}
+                                >
+                                    🔔
+                                    {notifications.length > 0 && (
+                                        <span className="nav-bell-badge" />
+                                    )}
+                                </button>
+
                                 <button className="nav-logout" onClick={handleLogout}>
                                     Log out
                                 </button>
@@ -239,6 +335,35 @@ function Navbar() {
                     </div>
 
                 </div>
+
+                {/* Notifications dropdown */}
+                {showNotifications && isLoggedIn && (
+                    <div className="nav-notifications-dropdown">
+                        <div className="nav-notifications-header">
+                            Notifications
+                            {notifications.length > 0 && (
+                                <button
+                                    className="nav-notifications-clear"
+                                    onClick={clearNotifications}
+                                >
+                                    Clear all
+                                </button>
+                            )}
+                        </div>
+                        {notifications.length === 0 ? (
+                            <div className="nav-notifications-empty">No notifications yet</div>
+                        ) : (
+                            notifications.map((n, i) => (
+                                <div key={i} className="nav-notification-item">
+                                    <div className="nav-notification-venue">{n.venueName}</div>
+                                    <div className="nav-notification-name">{n.name}</div>
+                                    <div className="nav-notification-date">{n.startDate} at {n.startTime}</div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+
             </nav>
         </>
     );

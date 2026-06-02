@@ -1,5 +1,6 @@
 package com.eventflow.backend.controller;
 
+import com.eventflow.backend.dto.EventRequest;
 import com.eventflow.backend.dto.LikedEventResponse;
 import com.eventflow.backend.model.Event;
 import com.eventflow.backend.model.User;
@@ -39,10 +40,9 @@ public class EventController {
     }
 
     @PostMapping
-    public Event createEvent(@RequestBody Event event) {
-        return eventService.saveEvent(event);
+    public Event createEvent(@RequestBody EventRequest eventRequest) {
+        return eventService.createEvent(eventRequest);
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable UUID id) {
         eventService.deleteEvent(id);
