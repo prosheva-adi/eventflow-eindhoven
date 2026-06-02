@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import VenuesPage from "./pages/VenuesPage.jsx";
 import VenueDetailPage from "./pages/VenueDetailPage.jsx";
+import AdminUsersPage from "./pages/AdminUsersPage.jsx";
 
 function App() {
     return (
@@ -21,8 +22,11 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/venues" element={<VenuesPage />} />
+
                 <Route path="/venues/:id" element={<VenueDetailPage />} />
-            </Routes>
+                <Route path="/admin/users" element={<AdminUsersPage />} />
+            </Routes>v
+
         </BrowserRouter>
     );
 }
