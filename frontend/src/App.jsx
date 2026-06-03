@@ -9,24 +9,23 @@ import EventDetailPage from "./pages/EventDetailPage";
 import VenuesPage from "./pages/VenuesPage.jsx";
 import VenueDetailPage from "./pages/VenueDetailPage.jsx";
 import AdminUsersPage from "./pages/AdminUsersPage.jsx";
-
 function App() {
     return (
         <BrowserRouter>
             <Navbar />
-            <Routes>
-                <Route path="/" element={<EventMap />} />
-                <Route path="/events" element={<EventsPage />} />
-                <Route path="/events/:id" element={<EventDetailPage />} />
-                <Route path="/saved" element={<SavedPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/venues" element={<VenuesPage />} />
-
-                <Route path="/venues/:id" element={<VenueDetailPage />} />
-                <Route path="/admin/users" element={<AdminUsersPage />} />
-            </Routes>v
-
+            <main>
+                <Routes>
+                    <Route path="/" element={<EventMap />} />
+                    <Route path="/events" element={<EventsPage />} />
+                    <Route path="/events/:id" element={<EventDetailPage />} />
+                    <Route path="/saved" element={<SavedPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/venues" element={<VenuesPage />} />
+                    <Route path="/venues/:id" element={<VenueDetailPage />} />
+                    <Route path="/admin/users" element={<AdminUsersPage />} />
+                </Routes>
+            </main>
         </BrowserRouter>
     );
 }
