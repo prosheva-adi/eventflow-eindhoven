@@ -2,7 +2,7 @@
 describe('Navigation', () => {
     it('should load the home page', () => {
         cy.visit('/')
-        cy.url().should('eq', 'http://localhost:5173/')
+        cy.url().should('eq', '/')
     })
 
     it('should navigate to events page', () => {
