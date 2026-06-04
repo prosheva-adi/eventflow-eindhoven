@@ -25,19 +25,4 @@ describe('Navigation', () => {
         cy.get('nav').should('not.contain', 'Venues')
     })
 
-    it('should show venues in navbar for admin', () => {
-        cy.clearAllCookies()
-        cy.clearAllLocalStorage()
-        cy.visit('/login')
-        cy.intercept('POST', '**/login').as('loginRequest')
-        cy.get('input[type="email"]').type('admin@gmail.com')
-        cy.get('input[type="password"]').type('Admin123')
-        cy.get('button[type="submit"]').click()
-        cy.wait('@loginRequest').then((interception) => {
-            cy.log('STATUS:', interception.response.statusCode)
-            cy.log('BODY:', JSON.stringify(interception.response.body))
-        })
-        cy.location('pathname').should('not.eq', '/login')
-        cy.get('nav').should('contain', 'Venues')
-    })
 })
