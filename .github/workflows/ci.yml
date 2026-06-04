@@ -41,7 +41,90 @@ jobs:
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [ backend, frontend ]
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Create application.properties
+        run: |
+          mkdir -p backend/src/main/resources
+          cat > backend/src/main/resources/application.properties << EOF
+          spring.datasource.url=${{ secrets.DB_URL }}
+          spring.datasource.username=${{ secrets.DB_USERNAME }}
+          spring.datasource.password=${{ secrets.DB_PASSWORD }}
+          spring.datasource.driver-class-name=org.postgresql.Driver
+          spring.jpa.hibernate.ddl-auto=validate
+          spring.jpa.show-sql=true
+          spring.jpa.open-in-view=false
+          spring.flyway.enabled=true
+          spring.flyway.locations=classpath:db/migration
+          spring.flyway.baseline-on-migrate=true
+          spring.flyway.validate-on-migrate=false
+          jwt.secret=${{ secrets.JWT_SECRET }}
+          jwt.expiration=86400000
+          spring.datasource.hikari.maximum-pool-size=5
+          spring.datasource.hikari.minimum-idle=2
+          spring.mail.host=smtp.gmail.com
+          spring.mail.port=587
+          spring.mail.username=${{ secrets.MAIL_USERNAME }}
+          spring.mail.password=${{ secrets.MAIL_PASSWORD }}
+          spring.mail.properties.mail.smtp.auth=true
+          spring.mail.properties.mail.smtp.starttls.enable=true
+          EOF
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build Docker images
+        run: |
+          docker build -t eventflow-backend ./backend
+          docker build -t eventflow-frontend ./frontend \
+            --build-arg VITE_API_URL=http://localhost:8080
+
+      - name: Start services
+        run: |
+          docker run -d --name backend \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e JWT_EXPIRATION=86400000 \
+            eventflow-backend
+          docker run -d --name frontend \
+            -p 80:80 \
+            --link backend \
+            eventflow-frontend
+
+      - name: Wait for backend to be ready
+        run: |
+          for i in {1..30}; do
+            curl -s http://localhost:8080/actuator/health && break
+            echo "Waiting for backend..."
+            sleep 5
+          done
+
+      - name: Wait for frontend to be ready
+        run: |
+          for i in {1..15}; do
+            curl -s http://localhost:80 && break
+            echo "Waiting for frontend..."
+            sleep 3
+          done
+
+      - name: Run Cypress tests
+        working-directory: ./frontend
+        run: npx cypress run --config baseUrl=http://localhost
+        env:
+          CYPRESS_BASE_URL: http://localhost
   sonarqube:
     runs-on: ubuntu-latest
     needs: [ backend, frontend ]
