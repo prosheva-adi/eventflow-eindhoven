@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export function useAuth() {
-    const [token, setToken] = useState(localStorage.getItem("token"));
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") || "null"));
+    const [auth, setAuth] = useState(() => ({
+        token: localStorage.getItem("token"),
+        user: JSON.parse(localStorage.getItem("user") || "null"),
+    }));
 
-    useEffect(() => {
-        const handleStorage = () => {
-            setToken(localStorage.getItem("token"));
-            setUser(JSON.parse(localStorage.getItem("user") || "null"));
-        };
-
-        window.addEventListener("storage", handleStorage);
-        return () => window.removeEventListener("storage", handleStorage);
-    }, []);
+    const refresh = () => {
+        setAuth({
+            token: localStorage.getItem("token"),
+            user: JSON.parse(localStorage.getItem("user") || "null"),
+        });
+    };
 
     return {
-        isLoggedIn: !!token,
-        isAdmin:    user?.role === "ADMIN",
-        user,
-        token,
+        isLoggedIn: !!auth.token,
+        isAdmin:    auth.user?.role === "ADMIN",
+        user:       auth.user,
+        token:      auth.token,
+        refresh,
     };
 }
