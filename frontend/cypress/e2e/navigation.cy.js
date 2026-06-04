@@ -26,6 +26,8 @@ describe('Navigation', () => {
     })
 
     it('should show venues in navbar for admin', () => {
+        cy.clearAllCookies()
+        cy.clearAllLocalStorage()
         cy.visit('/login')
         cy.get('input[type="email"]').type('admin@gmail.com')
         cy.get('input[type="password"]').type('Admin123')
