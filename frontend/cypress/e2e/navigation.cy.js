@@ -2,12 +2,12 @@
 describe('Navigation', () => {
     it('should load the home page', () => {
         cy.visit('/')
-        cy.url().should('eq', '/')
+        cy.location('pathname').should('eq', '/')
     })
 
     it('should navigate to events page', () => {
         cy.visit('/events')
-        cy.url().should('include', '/events')
+        cy.location('pathname').should('eq', '/events')
     })
 
     it('should navigate to login page', () => {
@@ -17,7 +17,7 @@ describe('Navigation', () => {
 
     it('should navigate to register page', () => {
         cy.visit('/register')
-        cy.url().should('include', '/register')
+        cy.location('pathname').should('eq', '/register')
     })
 
     it('should not show venues in navbar for guest', () => {
@@ -30,7 +30,7 @@ describe('Navigation', () => {
         cy.get('input[type="email"]').type('admin@gmail.com')
         cy.get('input[type="password"]').type('Admin123')
         cy.get('button[type="submit"]').click()
-        cy.wait(2000)
+        cy.location('pathname').should('not.eq', '/login')
         cy.get('nav').should('contain', 'Venues')
     })
 })
