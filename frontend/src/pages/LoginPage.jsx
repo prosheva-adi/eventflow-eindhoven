@@ -26,8 +26,7 @@ function LoginPage() {
                 email: response.data.email,
                 role: response.data.role
             }));
-            window.dispatchEvent(new Event("storage")); // ← add this
-            navigate("/");
+           navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Invalid email or password.");
         } finally {
