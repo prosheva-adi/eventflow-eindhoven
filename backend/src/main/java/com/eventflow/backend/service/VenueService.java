@@ -4,11 +4,13 @@ import com.eventflow.backend.model.User;
 import com.eventflow.backend.model.UserFollowedVenue;
 import com.eventflow.backend.model.UserFollowedVenueId;
 import com.eventflow.backend.model.Venue;
-import com.eventflow.backend.repository.UserRepository;
 import com.eventflow.backend.repository.UserFollowedVenueRepository;
+import com.eventflow.backend.repository.UserRepository;
 import com.eventflow.backend.repository.VenueRepository;
+import com.eventflow.backend.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +22,7 @@ public class VenueService {
     private final VenueRepository venueRepository;
     private final UserRepository userRepository;
     private final UserFollowedVenueRepository followRepository;
+    private final JwtUtil jwtUtil;
 
     public List<Venue> getAllVenues() {
         return venueRepository.findAll();
@@ -35,6 +38,45 @@ public class VenueService {
 
     public void deleteVenue(UUID id) {
         venueRepository.deleteById(id);
+    }
+
+    public Optional<Venue> updateVenue(UUID id, Venue updatedVenue) {
+        return venueRepository.findById(id).map(existing -> {
+            existing.setName(updatedVenue.getName());
+            existing.setDescription(updatedVenue.getDescription());
+            existing.setAddress(updatedVenue.getAddress());
+            existing.setLatitude(updatedVenue.getLatitude());
+            existing.setLongitude(updatedVenue.getLongitude());
+            existing.setImageUrl(updatedVenue.getImageUrl());
+            existing.setWebsite(updatedVenue.getWebsite());
+            existing.setCategory(updatedVenue.getCategory());
+            return venueRepository.save(existing);
+        });
+    }
+
+    public User getUserFromToken(String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public boolean isFollowing(String authHeader, UUID venueId) {
+        User user = getUserFromToken(authHeader);
+        UserFollowedVenueId followId = new UserFollowedVenueId();
+        followId.setUserId(user.getId());
+        followId.setVenueId(venueId);
+        return followRepository.existsById(followId);
+    }
+
+    public void followVenueByToken(String authHeader, UUID venueId) {
+        User user = getUserFromToken(authHeader);
+        followVenue(user.getId(), venueId);
+    }
+
+    public void unfollowVenueByToken(String authHeader, UUID venueId) {
+        User user = getUserFromToken(authHeader);
+        unfollowVenue(user.getId(), venueId);
     }
 
     public void followVenue(UUID userId, UUID venueId) {
