@@ -4,8 +4,17 @@ import api from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 
 const CATEGORIES = [
-    "MUSIC", "FOOD", "SPORTS", "ART", "TECH", "COMEDY", "NETWORKING", "OTHER"
+    "MUSIC", "SPORTS", "CULTURE", "FOOD_AND_DRINK", "NIGHTLIFE", "ART", "TECH", "COMEDY", "THEATRE", "OTHER"
 ];
+
+const DATE_FILTERS = ["ALL", "TODAY", "THIS_WEEKEND", "THIS_WEEK"];
+
+const DATE_FILTER_LABELS = {
+    ALL: "All",
+    TODAY: "Today",
+    THIS_WEEKEND: "This Weekend",
+    THIS_WEEK: "This Week"
+};
 
 const EMPTY_FORM = {
     venueId: "",
@@ -28,6 +37,57 @@ function sanitizeUrl(url) {
         if (parsed.protocol === "https:" || parsed.protocol === "http:") return url;
     } catch { /* invalid */ }
     return null;
+}
+
+// Converts enum values like FOOD_AND_DRINK -> "Food & Drink" for display
+function formatCategory(cat) {
+    if (!cat) return "";
+    return cat
+        .toLowerCase()
+        .split("_")
+        .map(word => word === "and" ? "&" : word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+}
+
+// Returns true if the event's startDate falls within the selected date filter
+function matchesDateFilter(event, dateFilter) {
+    if (dateFilter === "ALL") return true;
+    if (!event.startDate) return false;
+
+    const eventDate = new Date(event.startDate);
+    eventDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (dateFilter === "TODAY") {
+        return eventDate.getTime() === today.getTime();
+    }
+
+    if (dateFilter === "THIS_WEEK") {
+        const sevenDaysFromNow = new Date(today);
+        sevenDaysFromNow.setDate(today.getDate() + 7);
+        return eventDate >= today && eventDate < sevenDaysFromNow;
+    }
+
+    if (dateFilter === "THIS_WEEKEND") {
+        // "This weekend" = the upcoming (or current) Friday, Saturday, Sunday
+        const dayOfWeek = today.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
+        let daysUntilFriday = (5 - dayOfWeek + 7) % 7;
+        // If today is Sat/Sun, the weekend has already started
+        if (dayOfWeek === 6) daysUntilFriday = -1; // yesterday was Friday
+        if (dayOfWeek === 0) daysUntilFriday = -2; // Friday was 2 days ago
+
+        const friday = new Date(today);
+        friday.setDate(today.getDate() + daysUntilFriday);
+
+        const mondayAfter = new Date(friday);
+        mondayAfter.setDate(friday.getDate() + 3);
+
+        return eventDate >= friday && eventDate < mondayAfter;
+    }
+
+    return true;
 }
 
 const styles = `
@@ -85,8 +145,38 @@ const styles = `
     .ep-search-wrap-inner { position: relative; }
     .ep-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #444; font-size: 15px; pointer-events: none; }
 
+    .ep-filters {
+        max-width: 1400px; margin: 20px auto 0; padding: 0 40px;
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+        animation: fadeUp 0.5s ease 0.08s both;
+    }
+    .ep-filter-group { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .ep-filter-label {
+        font-size: 10px; font-weight: 600; color: #555; letter-spacing: 1px;
+        text-transform: uppercase; margin-right: 4px;
+    }
+    .filter-chip {
+        padding: 7px 16px; border-radius: 100px; font-family: 'DM Sans', sans-serif;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.4px; cursor: pointer;
+        transition: all 0.15s; border: 1px solid #222; background: transparent; color: #666;
+        white-space: nowrap;
+    }
+    .filter-chip:hover { border-color: #333; color: #999; }
+    .filter-chip.active {
+        border-color: rgba(108,99,255,0.5); background: rgba(108,99,255,0.12); color: #9d97ff;
+    }
+    .filter-divider {
+        width: 1px; height: 22px; background: #222; margin: 0 4px;
+    }
+    .filter-clear {
+        font-size: 12px; color: #555; background: none; border: none; cursor: pointer;
+        text-decoration: underline; letter-spacing: 0.2px; padding: 4px;
+        transition: color 0.15s;
+    }
+    .filter-clear:hover { color: #9d97ff; }
+
     .ep-grid {
-        max-width: 1400px; margin: 40px auto 0; padding: 0 40px 100px;
+        max-width: 1400px; margin: 28px auto 0; padding: 0 40px 100px;
         display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
         gap: 24px; animation: fadeUp 0.5s ease 0.1s both;
     }
@@ -170,6 +260,7 @@ const styles = `
     @media (max-width: 640px) {
         .ep-header { padding: 56px 24px 0; }
         .ep-search-wrap { padding: 0 24px; }
+        .ep-filters { padding: 0 24px; }
         .ep-grid { padding: 0 24px 80px; grid-template-columns: 1fr; }
         .field-row-3 { grid-template-columns: 1fr 1fr; }
         .field-row-2 { grid-template-columns: 1fr; }
@@ -192,6 +283,9 @@ export default function EventsPage() {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+
+    const [dateFilter, setDateFilter] = useState("ALL");
+    const [categoryFilter, setCategoryFilter] = useState("ALL");
 
     const { isAdmin } = useAuth();
 
@@ -280,11 +374,27 @@ export default function EventsPage() {
         return parseFloat(price) === 0 ? "Free" : `€${price}`;
     };
 
-    const filteredEvents = events.filter(e =>
-        e.name?.toLowerCase().includes(search.toLowerCase()) ||
-        e.venue?.name?.toLowerCase().includes(search.toLowerCase()) ||
-        e.organiserName?.toLowerCase().includes(search.toLowerCase())
-    );
+    const hasActiveFilters = dateFilter !== "ALL" || categoryFilter !== "ALL" || search.trim() !== "";
+
+    const clearFilters = () => {
+        setSearch("");
+        setDateFilter("ALL");
+        setCategoryFilter("ALL");
+    };
+
+    // Filters are combinable: search text AND date AND category all apply together
+    const filteredEvents = events.filter(e => {
+        const matchesSearch =
+            e.name?.toLowerCase().includes(search.toLowerCase()) ||
+            e.venue?.name?.toLowerCase().includes(search.toLowerCase()) ||
+            e.organiserName?.toLowerCase().includes(search.toLowerCase());
+
+        const matchesCategory = categoryFilter === "ALL" || e.categories?.includes(categoryFilter);
+
+        const matchesDate = matchesDateFilter(e, dateFilter);
+
+        return matchesSearch && matchesCategory && matchesDate;
+    });
 
     return (
         <>
@@ -376,7 +486,7 @@ export default function EventsPage() {
                                         const on = form.categories.includes(cat);
                                         return (
                                             <button key={cat} className={`cat-toggle ${on ? "on" : "off"}`} onClick={() => toggleCategory(cat)}>
-                                                {cat}
+                                                {formatCategory(cat)}
                                             </button>
                                         );
                                     })}
@@ -415,13 +525,54 @@ export default function EventsPage() {
                     </div>
                 </div>
 
+                {/* Filters: date and category, combinable */}
+                <div className="ep-filters">
+                    <div className="ep-filter-group">
+                        <span className="ep-filter-label">When</span>
+                        {DATE_FILTERS.map(df => (
+                            <button
+                                key={df}
+                                className={`filter-chip${dateFilter === df ? " active" : ""}`}
+                                onClick={() => setDateFilter(df)}
+                            >
+                                {DATE_FILTER_LABELS[df]}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="filter-divider" />
+
+                    <div className="ep-filter-group">
+                        <span className="ep-filter-label">Type</span>
+                        <button
+                            className={`filter-chip${categoryFilter === "ALL" ? " active" : ""}`}
+                            onClick={() => setCategoryFilter("ALL")}
+                        >
+                            All
+                        </button>
+                        {CATEGORIES.map(cat => (
+                            <button
+                                key={cat}
+                                className={`filter-chip${categoryFilter === cat ? " active" : ""}`}
+                                onClick={() => setCategoryFilter(cat)}
+                            >
+                                {formatCategory(cat)}
+                            </button>
+                        ))}
+                    </div>
+
+                    {hasActiveFilters && (
+                        <button className="filter-clear" onClick={clearFilters}>Clear filters</button>
+                    )}
+                </div>
+
                 {/* Grid */}
                 <div className="ep-grid">
                     {loading && <p className="ep-state">Loading events…</p>}
 
                     {!loading && filteredEvents.length === 0 && (
                         <p className="ep-state">
-                            {search ? `No events matching "${search}"` : "No events yet."}
+                            {hasActiveFilters ? "No events match your filters." : "No events yet."}
                         </p>
                     )}
 
@@ -439,7 +590,7 @@ export default function EventsPage() {
                                 <div className="event-card-body">
                                     {event.categories?.length > 0 && (
                                         <div className="event-card-categories">
-                                            {event.categories.map(c => <span key={c} className="event-card-cat">{c}</span>)}
+                                            {event.categories.map(c => <span key={c} className="event-card-cat">{formatCategory(c)}</span>)}
                                         </div>
                                     )}
                                     <h3 className="event-card-name">{event.name}</h3>
