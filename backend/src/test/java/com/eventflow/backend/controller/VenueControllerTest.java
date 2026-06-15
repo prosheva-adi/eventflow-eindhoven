@@ -1,9 +1,7 @@
 package com.eventflow.backend.controller;
 
+import com.eventflow.backend.exception.GlobalExceptionHandler;
 import com.eventflow.backend.model.Venue;
-import com.eventflow.backend.repository.UserFollowedVenueRepository;
-import com.eventflow.backend.repository.UserRepository;
-import com.eventflow.backend.security.JwtAuthFilter;
 import com.eventflow.backend.security.JwtUtil;
 import com.eventflow.backend.service.VenueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,22 +10,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import com.eventflow.backend.model.User;
-import com.eventflow.backend.model.enums.Role;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(VenueController.class)
+@Import(GlobalExceptionHandler.class)
 class VenueControllerTest {
 
     @Autowired
@@ -40,16 +40,7 @@ class VenueControllerTest {
     private VenueService venueService;
 
     @MockitoBean
-    private UserRepository userRepository;
-
-    @MockitoBean private UserFollowedVenueRepository followRepository;
-
-    @MockitoBean
     private JwtUtil jwtUtil;
-
-    @MockitoBean
-    private JwtAuthFilter jwtAuthFilter;
-
 
     private Venue testVenue;
     private UUID testId;
@@ -111,8 +102,7 @@ class VenueControllerTest {
 
     @Test
     void updateVenue_WhenExists_Returns200() throws Exception {
-        when(venueService.getVenueById(testId)).thenReturn(Optional.of(testVenue));
-        when(venueService.saveVenue(any(Venue.class))).thenReturn(testVenue);
+        when(venueService.updateVenue(eq(testId), any(Venue.class))).thenReturn(Optional.of(testVenue));
 
         mockMvc.perform(put("/api/venues/" + testId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +113,7 @@ class VenueControllerTest {
 
     @Test
     void updateVenue_WhenNotExists_Returns404() throws Exception {
-        when(venueService.getVenueById(testId)).thenReturn(Optional.empty());
+        when(venueService.updateVenue(eq(testId), any(Venue.class))).thenReturn(Optional.empty());
 
         mockMvc.perform(put("/api/venues/" + testId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -132,48 +122,44 @@ class VenueControllerTest {
     }
 
     @Test
-    void followVenue_Returns200() throws Exception {
-        User testUser = new User();
-        testUser.setId(UUID.randomUUID());
-        testUser.setEmail("user@test.com");
-        testUser.setRole(Role.USER);
+    void isFollowing_Returns200WithBoolean() throws Exception {
+        when(venueService.isFollowing(any(), eq(testId))).thenReturn(true);
 
-        when(jwtUtil.extractEmail(any())).thenReturn("user@test.com");
-        when(userRepository.findByEmail("user@test.com")).thenReturn(Optional.of(testUser));
-        doNothing().when(venueService).followVenue(any(), any());
+        mockMvc.perform(get("/api/venues/" + testId + "/follow")
+                        .header("Authorization", "Bearer test-token"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void followVenue_Returns200() throws Exception {
+        doNothing().when(venueService).followVenueByToken(any(), eq(testId));
 
         mockMvc.perform(post("/api/venues/" + testId + "/follow")
                         .header("Authorization", "Bearer test-token"))
                 .andExpect(status().isOk());
 
-        verify(venueService, times(1)).followVenue(testUser.getId(), testId);
+        verify(venueService, times(1)).followVenueByToken(any(), eq(testId));
     }
 
     @Test
     void unfollowVenue_Returns204() throws Exception {
-        User testUser = new User();
-        testUser.setId(UUID.randomUUID());
-        testUser.setEmail("user@test.com");
-        testUser.setRole(Role.USER);
-
-        when(jwtUtil.extractEmail(any())).thenReturn("user@test.com");
-        when(userRepository.findByEmail("user@test.com")).thenReturn(Optional.of(testUser));
-        doNothing().when(venueService).unfollowVenue(any(), any());
+        doNothing().when(venueService).unfollowVenueByToken(any(), eq(testId));
 
         mockMvc.perform(delete("/api/venues/" + testId + "/follow")
                         .header("Authorization", "Bearer test-token"))
                 .andExpect(status().isNoContent());
 
-        verify(venueService, times(1)).unfollowVenue(testUser.getId(), testId);
+        verify(venueService, times(1)).unfollowVenueByToken(any(), eq(testId));
     }
 
     @Test
     void followVenue_WhenUserNotFound_Returns400() throws Exception {
-        when(jwtUtil.extractEmail(any())).thenReturn("unknown@test.com");
-        when(userRepository.findByEmail("unknown@test.com")).thenReturn(Optional.empty());
+        doThrow(new RuntimeException("User not found"))
+                .when(venueService).followVenueByToken(any(), eq(testId));
 
         mockMvc.perform(post("/api/venues/" + testId + "/follow")
                         .header("Authorization", "Bearer test-token"))
-                .andExpect(status().isBadRequest()); // 400 not 500
+                .andExpect(status().isBadRequest());
     }
 }

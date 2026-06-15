@@ -1,10 +1,13 @@
 package com.eventflow.backend.service;
 
 import com.eventflow.backend.model.User;
+import com.eventflow.backend.model.UserFollowedVenue;
+import com.eventflow.backend.model.UserFollowedVenueId;
 import com.eventflow.backend.model.Venue;
 import com.eventflow.backend.repository.UserFollowedVenueRepository;
 import com.eventflow.backend.repository.UserRepository;
 import com.eventflow.backend.repository.VenueRepository;
+import com.eventflow.backend.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.eventflow.backend.model.UserFollowedVenue;
-
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +29,7 @@ class VenueServiceTest {
     @Mock private VenueRepository venueRepository;
     @Mock private UserRepository userRepository;
     @Mock private UserFollowedVenueRepository followRepository;
-
+    @Mock private JwtUtil jwtUtil;
 
     @InjectMocks
     private VenueService venueService;
@@ -96,6 +98,38 @@ class VenueServiceTest {
     }
 
     @Test
+    void updateVenue_WhenExists_UpdatesAndReturnsVenue() {
+        Venue updated = new Venue();
+        updated.setName("Updated Venue");
+        updated.setDescription("New description");
+        updated.setAddress("New address");
+        updated.setLatitude(BigDecimal.valueOf(51.45));
+        updated.setLongitude(BigDecimal.valueOf(5.47));
+        updated.setImageUrl("http://example.com/image.png");
+        updated.setWebsite("http://example.com");
+
+        when(venueRepository.findById(testId)).thenReturn(Optional.of(testVenue));
+        when(venueRepository.save(any(Venue.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Optional<Venue> result = venueService.updateVenue(testId, updated);
+
+        assertTrue(result.isPresent());
+        assertEquals("Updated Venue", result.get().getName());
+        assertEquals("New description", result.get().getDescription());
+        verify(venueRepository, times(1)).save(any(Venue.class));
+    }
+
+    @Test
+    void updateVenue_WhenNotExists_ReturnsEmpty() {
+        when(venueRepository.findById(testId)).thenReturn(Optional.empty());
+
+        Optional<Venue> result = venueService.updateVenue(testId, testVenue);
+
+        assertFalse(result.isPresent());
+        verify(venueRepository, never()).save(any());
+    }
+
+    @Test
     void followVenue_WhenNotAlreadyFollowing_SavesFollow() {
         User testUser = new User();
         testUser.setId(UUID.randomUUID());
@@ -154,5 +188,30 @@ class VenueServiceTest {
         venueService.unfollowVenue(randomUserId, testId);
 
         verify(followRepository, times(1)).deleteById(any());
+    }
+
+    @Test
+    void followVenueByToken_ExtractsUserAndFollows() {
+        User testUser = new User();
+        testUser.setId(UUID.randomUUID());
+        testUser.setEmail("user@test.com");
+
+        when(jwtUtil.extractEmail("test-token")).thenReturn("user@test.com");
+        when(userRepository.findByEmail("user@test.com")).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(venueRepository.findById(testId)).thenReturn(Optional.of(testVenue));
+        when(followRepository.existsById(any())).thenReturn(false);
+
+        venueService.followVenueByToken("Bearer test-token", testId);
+
+        verify(followRepository, times(1)).save(any(UserFollowedVenue.class));
+    }
+
+    @Test
+    void getUserFromToken_WhenUserNotFound_ThrowsException() {
+        when(jwtUtil.extractEmail("test-token")).thenReturn("unknown@test.com");
+        when(userRepository.findByEmail("unknown@test.com")).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> venueService.getUserFromToken("Bearer test-token"));
     }
 }
