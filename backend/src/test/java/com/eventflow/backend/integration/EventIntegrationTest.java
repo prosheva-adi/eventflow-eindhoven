@@ -51,7 +51,7 @@ class EventIntegrationTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void createEvent_WithAdminAuth_Returns200() throws Exception {
-        // first create a venue to get a real venueId
+
         Venue venue = new Venue();
         venue.setName("Test Venue");
         venue.setAddress("Test Address");

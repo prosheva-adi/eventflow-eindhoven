@@ -23,10 +23,6 @@ public class EventController {
     private final EventService eventService;
     private final LikedEventService likedEventService;
 
-    // -------------------------------------------------------------------------
-    // Event CRUD
-    // -------------------------------------------------------------------------
-
     @GetMapping
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
@@ -71,10 +67,6 @@ public class EventController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    // -------------------------------------------------------------------------
-    // Like / Unlike
-    // -------------------------------------------------------------------------
 
     /** POST /api/events/{eventId}/like  — like an event */
     @PostMapping("/{eventId}/like")

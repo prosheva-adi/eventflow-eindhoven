@@ -44,7 +44,7 @@ class AuthServiceTest {
         testUser.setRole(Role.USER);
     }
 
-    // ── Register ──
+
 
     @Test
     void register_Success_ReturnsAuthResponse() {
@@ -93,7 +93,7 @@ class AuthServiceTest {
         verify(userRepository, never()).save(any());
     }
 
-    // ── Login ──
+
 
     @Test
     void login_Success_ReturnsAuthResponse() {

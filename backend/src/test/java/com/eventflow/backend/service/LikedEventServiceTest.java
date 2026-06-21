@@ -47,7 +47,7 @@ class LikedEventServiceTest {
         testEvent.setName("Test Event");
     }
 
-    // ── likeEvent ──
+
 
     @Test
     void likeEvent_WhenNotAlreadyLiked_SavesLike() {
@@ -80,7 +80,6 @@ class LikedEventServiceTest {
         verify(likedEventRepository, never()).save(any());
     }
 
-    // ── unlikeEvent ──
 
     @Test
     void unlikeEvent_WhenLikeExists_DeletesLike() {
@@ -101,7 +100,6 @@ class LikedEventServiceTest {
         verify(likedEventRepository, never()).deleteById(any());
     }
 
-    // ── isLiked ──
 
     @Test
     void isLiked_WhenLiked_ReturnsTrue() {
@@ -117,7 +115,6 @@ class LikedEventServiceTest {
         assertFalse(likedEventService.isLiked(testUser, eventId));
     }
 
-    // ── getLikedEvents ──
 
     @Test
     void getLikedEvents_ReturnsListOfResponses() {

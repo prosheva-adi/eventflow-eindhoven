@@ -39,7 +39,7 @@ class EventControllerTest {
     private EventService eventService;
 
     @MockitoBean
-    private LikedEventService likedEventService; // ← added: EventController now depends on this
+    private LikedEventService likedEventService;
 
     @MockitoBean
     private JwtUtil jwtUtil;

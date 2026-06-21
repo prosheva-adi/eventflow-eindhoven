@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .policyDirectives("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' http://145.220.72.88:8080;")
                         )
                         .frameOptions(frame -> frame.deny())
-                        .contentTypeOptions(Customizer.withDefaults())  // fixes X-Content-Type-Options
+                        .contentTypeOptions(Customizer.withDefaults())
                 )
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -39,24 +39,21 @@ public class SecurityConfig {
                         // Public
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Like endpoints — any logged-in user (must come BEFORE the broad event rules)
                         .requestMatchers(HttpMethod.GET,    "/api/events/liked").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/api/events/*/like").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST,   "/api/events/*/like").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/events/*/like").hasAnyRole("USER", "ADMIN")
 
-                        // Event CRUD — public read, admin write
+                        // Event CRUD
                         .requestMatchers(HttpMethod.GET,    "/api/events/**").permitAll()
                         .requestMatchers(HttpMethod.POST,   "/api/events/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/api/events/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
 
-                                // Venue follow — any logged-in user (must come BEFORE the broad venue rules)
                                 .requestMatchers(HttpMethod.GET, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.POST,   "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/venues/*/follow").hasAnyRole("USER", "ADMIN")
 
-// Venues — admin only
                                 .requestMatchers(HttpMethod.GET,    "/api/venues/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,   "/api/venues/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT,    "/api/venues/**").hasRole("ADMIN")
@@ -64,7 +61,7 @@ public class SecurityConfig {
 
 
                                 .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/ws/**").permitAll() // add this
+                                .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

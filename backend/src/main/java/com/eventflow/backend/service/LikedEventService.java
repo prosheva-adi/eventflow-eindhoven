@@ -27,7 +27,7 @@ public class LikedEventService {
         UserLikedEventId id = buildId(currentUser.getId(), eventId);
 
         if (likedEventRepository.existsById(id)) {
-            return; // already liked — idempotent, no error
+            return;
         }
 
         Event event = eventRepository.findById(eventId)
