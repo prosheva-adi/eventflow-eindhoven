@@ -178,7 +178,7 @@ export default function EventDetailPage() {
     const [likeLoading, setLikeLoading] = useState(false);
     const [iconAnim, setIconAnim]       = useState("");
 
-    // Fetch event
+
     useEffect(() => {
         api.get(`/api/events/${id}`)
             .then(res => setEvent(res.data))
@@ -186,8 +186,7 @@ export default function EventDetailPage() {
             .finally(() => setLoading(false));
     }, [id]);
 
-    // Check liked status once event is loaded
-    useEffect(() => {
+   useEffect(() => {
         if (!isLoggedIn || !event) return;
         api.get(`/api/events/${id}/like`)
             .then(res => setLiked(res.data.liked))
@@ -280,7 +279,7 @@ export default function EventDetailPage() {
                         </div>
                     )}
 
-                    {/* Title + like button side by side */}
+                    {}
                     <div className="title-row">
                         <h1 className="event-title">{event.name}</h1>
                         {isLoggedIn && (

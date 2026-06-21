@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 
@@ -186,7 +186,6 @@ function SkeletonCard() {
 
 export default function SavedPage() {
     const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
 
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -205,7 +204,6 @@ export default function SavedPage() {
         e.preventDefault();
         e.stopPropagation();
 
-        // Animate out first, then remove from state
         setRemoving(prev => new Set(prev).add(eventId));
         setTimeout(async () => {
             try {
@@ -243,7 +241,7 @@ export default function SavedPage() {
             <style>{styles}</style>
             <div className="sp">
 
-                {/* ── Auth gate ── */}
+
                 {!isLoggedIn && (
                     <div className="sp-auth-gate">
                         <div className="sp-auth-icon">♡</div>
@@ -255,7 +253,7 @@ export default function SavedPage() {
 
                 {isLoggedIn && (
                     <>
-                        {/* ── Header ── */}
+
                         <div className="sp-header">
                             <div>
                                 <h1 className="sp-title">Saved Events</h1>
@@ -268,7 +266,7 @@ export default function SavedPage() {
                             )}
                         </div>
 
-                        {/* ── Search ── */}
+
                         {!loading && events.length > 0 && (
                             <div className="sp-search-wrap">
                                 <div className="sp-search-wrap-inner">
@@ -283,13 +281,10 @@ export default function SavedPage() {
                             </div>
                         )}
 
-                        {/* ── Grid ── */}
+
                         <div className="sp-grid">
 
-                            {/* Skeletons while loading */}
                             {loading && [0,1,2].map(i => <SkeletonCard key={i} />)}
-
-                            {/* Empty state */}
                             {!loading && events.length === 0 && (
                                 <div className="sp-empty">
                                     <div className="sp-empty-icon">♡</div>
@@ -329,7 +324,7 @@ export default function SavedPage() {
                                                 </span>
                                             )}
 
-                                            {/* Unlike button */}
+
                                             <button
                                                 className={`unlike-btn${isRemoving ? " removing" : ""}`}
                                                 onClick={(e) => handleUnlike(e, event.eventId)}
@@ -338,7 +333,6 @@ export default function SavedPage() {
                                                 ♥
                                             </button>
 
-                                            {/* Liked-at timestamp */}
                                             {event.likedAt && (
                                                 <span className="liked-at-badge">
                                                     Saved {formatLikedAt(event.likedAt)}

@@ -165,9 +165,9 @@ export default function VenuesPage() {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
 
-    const navigate = useNavigate();   // ← add this
+    const navigate = useNavigate();
 
-    useEffect(() => {                  // ← add this block
+    useEffect(() => {
         if (!isAdmin) navigate("/");
     }, [isAdmin]);
 

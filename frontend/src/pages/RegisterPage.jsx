@@ -30,13 +30,12 @@ function RegisterPage() {
                 password
             });
 
-            // Store token and user info
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("user", JSON.stringify({
                 userId: response.data.userId,
                 username: response.data.username,
                 email: response.data.email,
-                role: response.data.role   // add this
+                role: response.data.role
             }));
 
             navigate("/");

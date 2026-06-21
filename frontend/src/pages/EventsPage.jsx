@@ -39,7 +39,6 @@ function sanitizeUrl(url) {
     return null;
 }
 
-// Converts enum values like FOOD_AND_DRINK -> "Food & Drink" for display
 function formatCategory(cat) {
     if (!cat) return "";
     return cat
@@ -49,7 +48,6 @@ function formatCategory(cat) {
         .join(" ");
 }
 
-// Returns true if the event's startDate falls within the selected date filter
 function matchesDateFilter(event, dateFilter) {
     if (dateFilter === "ALL") return true;
     if (!event.startDate) return false;
@@ -71,12 +69,11 @@ function matchesDateFilter(event, dateFilter) {
     }
 
     if (dateFilter === "THIS_WEEKEND") {
-        // "This weekend" = the upcoming (or current) Friday, Saturday, Sunday
-        const dayOfWeek = today.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
+
+        const dayOfWeek = today.getDay();
         let daysUntilFriday = (5 - dayOfWeek + 7) % 7;
-        // If today is Sat/Sun, the weekend has already started
-        if (dayOfWeek === 6) daysUntilFriday = -1; // yesterday was Friday
-        if (dayOfWeek === 0) daysUntilFriday = -2; // Friday was 2 days ago
+        if (dayOfWeek === 6) daysUntilFriday = -1;
+        if (dayOfWeek === 0) daysUntilFriday = -2;
 
         const friday = new Date(today);
         friday.setDate(today.getDate() + daysUntilFriday);
@@ -382,7 +379,6 @@ export default function EventsPage() {
         setCategoryFilter("ALL");
     };
 
-    // Filters are combinable: search text AND date AND category all apply together
     const filteredEvents = events.filter(e => {
         const matchesSearch =
             e.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -409,7 +405,6 @@ export default function EventsPage() {
                                 <button className="modal-close" onClick={handleClose} aria-label="Close">✕</button>
                             </div>
 
-                            {/* Venue dropdown */}
                             <div className="field-group">
                                 <label className="field-label">Venue *</label>
                                 <select
@@ -504,7 +499,6 @@ export default function EventsPage() {
                     </div>
                 )}
 
-                {/* Page header */}
                 <div className="ep-header">
                     <div>
                         <h1 className="ep-title">Discover Events</h1>
@@ -517,7 +511,6 @@ export default function EventsPage() {
                     )}
                 </div>
 
-                {/* Search */}
                 <div className="ep-search-wrap">
                     <div className="ep-search-wrap-inner">
                         <span className="ep-search-icon">⌕</span>
@@ -525,7 +518,6 @@ export default function EventsPage() {
                     </div>
                 </div>
 
-                {/* Filters: date and category, combinable */}
                 <div className="ep-filters">
                     <div className="ep-filter-group">
                         <span className="ep-filter-label">When</span>
@@ -566,7 +558,6 @@ export default function EventsPage() {
                     )}
                 </div>
 
-                {/* Grid */}
                 <div className="ep-grid">
                     {loading && <p className="ep-state">Loading events…</p>}
 
